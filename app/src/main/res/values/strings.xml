@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">PRACTICA</string>
+    <string name="title_activity_results">ResultsActivity</string>
+    <string name="title_activity_configuration">ConfigurationActivity</string>
+    <string name="title_activity_help">HelpActivity</string>
+    <string name="title_activity_game">GameActivity</string>
+    <string name="Button1">Ajuda</string>
+    <string name="Button2">Començar partida</string>
+    <string name="Button3">Sortir</string>
+    <string name="title_activity_main_view_model">MainViewModel</string>
 </resources>
