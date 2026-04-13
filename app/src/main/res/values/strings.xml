@@ -8,5 +8,9 @@
     <string name="Button2">Començar partida</string>
     <string name="Button3">Sortir</string>
     <string name="Button4">Anar al menú</string>
+    <string name="Button5">Alias identificatiu</string>
+    <string name="Button6">Mida graella (Columnes)</string>
+    <string name="Button7">Control del temps</string>
+    <string name="Button8">Començar</string>
     <string name="title_activity_main_view_model">MainViewModel</string>
 </resources>
