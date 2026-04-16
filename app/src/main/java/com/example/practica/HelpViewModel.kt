@@ -3,9 +3,11 @@ package com.example.practica
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.compose.runtime.setValue
 
 class HelpViewModel : ViewModel() {
-    val title by mutableStateOf("AYUDA")
+    var title by mutableStateOf("AJUDA")
+        private set
 
     val instructions by mutableStateOf(
         "Benvingut al joc del CONNECT 4!\n\n" +

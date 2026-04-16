@@ -8,25 +8,27 @@ import androidx.lifecycle.ViewModel
 
 class ConfigurationViewModel : ViewModel() {
 
+    var title by mutableStateOf("CONFIGURACIÓ")
+        private set
     var alias by mutableStateOf("p1")
         private set
 
-    var columnes by mutableIntStateOf(7)
+    var columns by mutableIntStateOf(7)
         private set
 
-    var controlTemps by mutableStateOf(false)
+    var time by mutableStateOf(false)
         private set
 
-    fun onAliasChange(nouAlias: String) {
-        alias = nouAlias
+    fun onAliasChange(newAlias: String) {
+        alias = newAlias
     }
 
-    fun onColumnesChange(novesColumnes: Int) {
-        columnes = novesColumnes
+    fun onColumnsChange(newColumns: Int) {
+        columns = newColumns
 
     }
 
-    fun onControlTempsChange(actiu: Boolean) {
-        controlTemps = actiu
+    fun onTimeChange(active: Boolean) {
+        time = active
     }
 }

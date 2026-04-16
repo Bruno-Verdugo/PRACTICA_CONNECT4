@@ -20,6 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.practica.ui.theme.PRACTICATheme
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +32,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color(0xFFF0F0F0)
                 ) {
-                    MenuPrincipalScreen()
+                    PrincipalScreen()
                 }
             }
         }
@@ -38,7 +40,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MenuPrincipalScreen(mainViewModel: MainViewModel = viewModel()) {
+fun PrincipalScreen(mainViewModel: MainViewModel = viewModel()) {
     val context = LocalContext.current
     val activity = context as? Activity
 
@@ -47,20 +49,30 @@ fun MenuPrincipalScreen(mainViewModel: MainViewModel = viewModel()) {
         verticalArrangement = Arrangement.SpaceBetween
     ) {
 
-        Row(
-            modifier = Modifier.fillMaxWidth().height(75.dp).background(Color(0xFF4CAF40)).padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(text = "🎮",
-                fontSize = 30.sp,
-                modifier = Modifier.padding(end = 12.dp)
-            )
+        Box(modifier = Modifier.fillMaxWidth().height(100.dp).background(Color(0xFF2196F7)).padding(horizontal = 16.dp)) {
+
+            Column(
+                modifier = Modifier.align(Alignment.CenterStart),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.mando),
+                    contentDescription = "Mando",
+                    modifier = Modifier.size(38.dp)
+                )
+                Text(
+                    text = mainViewModel.gameTitle,
+                    fontSize = 14.sp,
+                    color = Color.White
+                )
+            }
 
             Text(
-                text = mainViewModel.screenSubtitle,
+                text = mainViewModel.title,
+                modifier = Modifier.align(Alignment.Center),
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF333333)
+                color = Color.White
             )
         }
 
@@ -68,10 +80,6 @@ fun MenuPrincipalScreen(mainViewModel: MainViewModel = viewModel()) {
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val buttonColors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFE0E0E0),
-                contentColor = Color.Black
-            )
 
             Button(
                 onClick = {
@@ -79,11 +87,13 @@ fun MenuPrincipalScreen(mainViewModel: MainViewModel = viewModel()) {
                     context.startActivity(intent)
                     activity?.finish()
                 },
-                colors = buttonColors,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.LightGray,
+                    contentColor = Color.Black),
                 modifier = Modifier.width(240.dp).height(50.dp),
                 elevation = ButtonDefaults.buttonElevation(4.dp)
             ) {
-                Text(text = stringResource(R.string.Button1), fontSize = 18.sp)
+                Text(text = stringResource(R.string.ButtonHelp), fontSize = 18.sp)
             }
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -94,26 +104,38 @@ fun MenuPrincipalScreen(mainViewModel: MainViewModel = viewModel()) {
                     context.startActivity(intent)
                     activity?.finish()
                 },
-                colors = buttonColors,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.LightGray,
+                    contentColor = Color.Black),
                 modifier = Modifier.width(240.dp).height(50.dp),
                 elevation = ButtonDefaults.buttonElevation(4.dp)
             ) {
-                Text(text = stringResource(R.string.Button2), fontSize = 18.sp)
+                Text(text = stringResource(R.string.ButtonStart), fontSize = 18.sp)
             }
 
             Spacer(modifier = Modifier.height(20.dp))
 
             Button(
                 onClick = { activity?.finish() },
-                colors = buttonColors,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.LightGray,
+                    contentColor = Color.Black),
                 modifier = Modifier.width(240.dp).height(50.dp),
                 elevation = ButtonDefaults.buttonElevation(4.dp)
             ) {
-                Text(text = stringResource(R.string.Button3), fontSize = 18.sp)
+                Text(text = stringResource(R.string.ButtonExit), fontSize = 18.sp)
             }
+
+            Spacer(modifier = Modifier.height(40.dp))
+
+            Image(
+                painter = painterResource(id = R.drawable.connect4),
+                contentDescription = "Logo Connect 4",
+                modifier = Modifier.fillMaxWidth(0.8f).height(200.dp)
+            )
         }
 
-        Box(modifier = Modifier.fillMaxWidth().height(60.dp).background(Color.Transparent))
+        Box(modifier = Modifier.fillMaxWidth().height(100.dp).background(Color(0xFF2196F7)))
     }
 }
 
@@ -121,6 +143,6 @@ fun MenuPrincipalScreen(mainViewModel: MainViewModel = viewModel()) {
 @Composable
 fun MenuPrincipalPreview() {
     PRACTICATheme(darkTheme = false) {
-        MenuPrincipalScreen()
+        PrincipalScreen()
     }
 }

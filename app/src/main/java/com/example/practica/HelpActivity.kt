@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -15,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -50,31 +52,31 @@ fun HelpScreen(helpViewModel: HelpViewModel = viewModel()) {
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().height(90.dp).background(Color(0xFF4CAF50)).padding(16.dp),
+            modifier = Modifier.fillMaxWidth().height(90.dp).background(Color(0xFF2196F7)).padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "❓",
-                fontSize = 30.sp,
-                modifier = Modifier.padding(end = 12.dp)
+            Image(
+                painter = painterResource(id = R.drawable.ayuda),
+                contentDescription = "Botón ayuda",
+                modifier = Modifier.size(35.dp)
             )
 
             Text(
                 text = helpViewModel.title,
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF333333)
+                color = Color.White,
+                modifier = Modifier.padding(15.dp)
             )
         }
 
-        Box(
-            modifier = Modifier.weight(1f).padding(horizontal = 24.dp).verticalScroll(rememberScrollState())
-        ) {
+        Box(modifier = Modifier.weight(1f).padding(horizontal = 24.dp).verticalScroll(rememberScrollState())) {
             Text(
                 text = helpViewModel.instructions,
                 fontSize = 18.sp,
-                lineHeight = 26.sp,
+                lineHeight = 23.sp,
                 textAlign = TextAlign.Justify,
-                color = Color(0xFF444444),
+                color = Color.Black,
                 modifier = Modifier.padding(vertical = 16.dp)
             )
         }
@@ -90,16 +92,18 @@ fun HelpScreen(helpViewModel: HelpViewModel = viewModel()) {
                     activity?.finish()
                 },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFE0E0E0),
+                    containerColor = Color.LightGray,
                     contentColor = Color.Black
                 ),
                 modifier = Modifier.width(200.dp).height(50.dp),
                 elevation = ButtonDefaults.buttonElevation(4.dp)
             ) {
-                Text(stringResource(R.string.Button4), fontSize = 18.sp)
+                Text(stringResource(R.string.ButtonMenu), fontSize = 18.sp)
             }
 
-            Box(modifier = Modifier.fillMaxWidth().height(60.dp).background(Color.Transparent))
+            Spacer(modifier = Modifier.height(45.dp))
+
+            Box(modifier = Modifier.fillMaxWidth().height(100.dp).background(Color(0xFF2196F7)))
         }
     }
 }
