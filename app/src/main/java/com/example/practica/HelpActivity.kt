@@ -52,7 +52,7 @@ fun HelpScreen(helpViewModel: HelpViewModel = viewModel()) {
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().height(90.dp).background(Color(0xFF2196F7)).padding(16.dp),
+            modifier = Modifier.fillMaxWidth().height(100.dp).background(Color(0xFF2196F7)).padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
@@ -62,8 +62,8 @@ fun HelpScreen(helpViewModel: HelpViewModel = viewModel()) {
             )
 
             Text(
-                text = helpViewModel.title,
-                fontSize = 30.sp,
+                text = stringResource(R.string.help_title),
+                fontSize = 27.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
                 modifier = Modifier.padding(15.dp)
@@ -91,17 +91,17 @@ fun HelpScreen(helpViewModel: HelpViewModel = viewModel()) {
                     context.startActivity(intent)
                     activity?.finish()
                 },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.LightGray,
-                    contentColor = Color.Black
-                ),
-                modifier = Modifier.width(200.dp).height(50.dp),
+                colors = ButtonDefaults.buttonColors(Color.LightGray),
+                modifier = Modifier.width(240.dp).height(50.dp),
                 elevation = ButtonDefaults.buttonElevation(4.dp)
             ) {
-                Text(stringResource(R.string.ButtonMenu), fontSize = 18.sp)
+                Text(stringResource(R.string.ButtonMenu),
+                    fontSize = 18.sp,
+                    color = Color.Black
+                )
             }
 
-            Spacer(modifier = Modifier.height(45.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             Box(modifier = Modifier.fillMaxWidth().height(100.dp).background(Color(0xFF2196F7)))
         }

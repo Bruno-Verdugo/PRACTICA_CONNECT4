@@ -18,7 +18,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.practica.ui.theme.PRACTICATheme
 import androidx.compose.foundation.Image
 import androidx.compose.ui.res.painterResource
@@ -40,7 +39,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun PrincipalScreen(mainViewModel: MainViewModel = viewModel()) {
+fun PrincipalScreen() {
     val context = LocalContext.current
     val activity = context as? Activity
 
@@ -58,19 +57,19 @@ fun PrincipalScreen(mainViewModel: MainViewModel = viewModel()) {
                 Image(
                     painter = painterResource(id = R.drawable.mando),
                     contentDescription = "Mando",
-                    modifier = Modifier.size(38.dp)
+                    modifier = Modifier.size(35.dp)
                 )
                 Text(
-                    text = mainViewModel.gameTitle,
+                    text = stringResource(R.string.main_gametitle),
                     fontSize = 14.sp,
                     color = Color.White
                 )
             }
 
             Text(
-                text = mainViewModel.title,
+                text = stringResource(R.string.main_title),
                 modifier = Modifier.align(Alignment.Center),
-                fontSize = 30.sp,
+                fontSize = 27.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
             )
@@ -87,13 +86,13 @@ fun PrincipalScreen(mainViewModel: MainViewModel = viewModel()) {
                     context.startActivity(intent)
                     activity?.finish()
                 },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.LightGray,
-                    contentColor = Color.Black),
+                colors = ButtonDefaults.buttonColors(Color.LightGray),
                 modifier = Modifier.width(240.dp).height(50.dp),
                 elevation = ButtonDefaults.buttonElevation(4.dp)
             ) {
-                Text(text = stringResource(R.string.ButtonHelp), fontSize = 18.sp)
+                Text(text = stringResource(R.string.ButtonHelp),
+                    fontSize = 18.sp,
+                    color = Color.Black)
             }
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -104,34 +103,36 @@ fun PrincipalScreen(mainViewModel: MainViewModel = viewModel()) {
                     context.startActivity(intent)
                     activity?.finish()
                 },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.LightGray,
-                    contentColor = Color.Black),
+                colors = ButtonDefaults.buttonColors(Color.LightGray),
                 modifier = Modifier.width(240.dp).height(50.dp),
                 elevation = ButtonDefaults.buttonElevation(4.dp)
             ) {
-                Text(text = stringResource(R.string.ButtonStart), fontSize = 18.sp)
+                Text(text = stringResource(R.string.ButtonStart),
+                    fontSize = 18.sp,
+                    color = Color.Black
+                )
             }
 
             Spacer(modifier = Modifier.height(20.dp))
 
             Button(
                 onClick = { activity?.finish() },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.LightGray,
-                    contentColor = Color.Black),
+                colors = ButtonDefaults.buttonColors(Color.LightGray),
                 modifier = Modifier.width(240.dp).height(50.dp),
                 elevation = ButtonDefaults.buttonElevation(4.dp)
             ) {
-                Text(text = stringResource(R.string.ButtonExit), fontSize = 18.sp)
+                Text(text = stringResource(R.string.ButtonExit),
+                    fontSize = 18.sp,
+                    color = Color.Black
+                )
             }
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(50.dp))
 
             Image(
                 painter = painterResource(id = R.drawable.connect4),
                 contentDescription = "Logo Connect 4",
-                modifier = Modifier.fillMaxWidth(0.8f).height(200.dp)
+                modifier = Modifier.fillMaxWidth(0.8f).height(180.dp)
             )
         }
 

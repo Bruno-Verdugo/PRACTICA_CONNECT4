@@ -66,13 +66,13 @@ fun GameScreen(alias: String, columns: Int, time: Boolean, gameViewModel: GameVi
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().height(80.dp).background(Color(0xFF2196F7)).padding(16.dp),
+            modifier = Modifier.fillMaxWidth().height(100.dp).background(Color(0xFF2196F7)).padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text("Jugador: $alias",
                 color = Color.White,
-                fontSize = 18.sp,
+                fontSize = 23.sp,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -82,7 +82,10 @@ fun GameScreen(alias: String, columns: Int, time: Boolean, gameViewModel: GameVi
         val columnFullTrigger = gameViewModel.columnFullTrigger
         LaunchedEffect(columnFullTrigger) {
             if (columnFullTrigger > 0) {
-                Toast.makeText(context, "Columna plena! Escull una altra.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,
+                    "Columna plena! Escull una altra.",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
@@ -116,15 +119,6 @@ fun GameScreen(alias: String, columns: Int, time: Boolean, gameViewModel: GameVi
             }
         }
 
-        Text(
-            text = statusText,
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black
-        )
-
-        Spacer(modifier = Modifier.height(25.dp))
-
         val timeText = if (gameViewModel.isTimeEnabled) {
             "${gameViewModel.timeLeft} segons."
         } else {
@@ -138,8 +132,17 @@ fun GameScreen(alias: String, columns: Int, time: Boolean, gameViewModel: GameVi
         }
 
         Text(
-            text = timeText,
+            text = statusText,
             fontSize = 22.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black
+        )
+
+        Spacer(modifier = Modifier.height(25.dp))
+
+        Text(
+            text = timeText,
+            fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             color = timeColor
         )
@@ -150,7 +153,7 @@ fun GameScreen(alias: String, columns: Int, time: Boolean, gameViewModel: GameVi
             BoardView(gameViewModel = gameViewModel, columns = columns)
         }
 
-        Spacer(modifier = Modifier.height(157.dp))
+        Spacer(modifier = Modifier.height(165.dp))
 
         Box(modifier = Modifier.fillMaxWidth().height(100.dp).background(Color(0xFF2196F7)))
     }

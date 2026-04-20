@@ -55,7 +55,7 @@ class GameViewModel : ViewModel() {
         isBoardCreated = true
         isTimeEnabled = time
         if (isTimeEnabled) {
-            manageTime(30)
+            manageTime(45)
         }
     }
 

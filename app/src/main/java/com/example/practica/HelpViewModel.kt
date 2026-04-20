@@ -6,8 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.compose.runtime.setValue
 
 class HelpViewModel : ViewModel() {
-    var title by mutableStateOf("AJUDA")
-        private set
 
     val instructions by mutableStateOf(
         "Benvingut al joc del CONNECT 4!\n\n" +

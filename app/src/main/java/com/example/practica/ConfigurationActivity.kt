@@ -48,7 +48,7 @@ fun ConfigurationScreen(configViewModel: ConfigurationViewModel = viewModel()) {
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Row(modifier = Modifier.fillMaxWidth().height(90.dp).background(Color(0xFF2196F7)).padding(16.dp),
+        Row(modifier = Modifier.fillMaxWidth().height(100.dp).background(Color(0xFF2196F7)).padding(20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
@@ -58,8 +58,8 @@ fun ConfigurationScreen(configViewModel: ConfigurationViewModel = viewModel()) {
             )
 
             Text(
-                text = configViewModel.title,
-                fontSize = 30.sp,
+                text = stringResource(R.string.config_title),
+                fontSize = 27.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
                 modifier = Modifier.padding(12.dp)
@@ -70,7 +70,11 @@ fun ConfigurationScreen(configViewModel: ConfigurationViewModel = viewModel()) {
             modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp)
         ) {
             
-            Text(text = stringResource(R.string.ButtonAlias), color = Color.Black, fontSize = 14.sp)
+            Text(text = stringResource(R.string.ButtonAlias),
+                color = Color.Black,
+                fontSize = 14.sp
+            )
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
@@ -84,7 +88,7 @@ fun ConfigurationScreen(configViewModel: ConfigurationViewModel = viewModel()) {
                 OutlinedTextField(
                     value = configViewModel.alias,
                     onValueChange = { configViewModel.onAliasChange(it) },
-                    modifier = Modifier.width(220.dp).padding(10.dp),
+                    modifier = Modifier.width(240.dp).padding(10.dp),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = Color.White,
                         unfocusedContainerColor = Color.White
@@ -161,19 +165,19 @@ fun ConfigurationScreen(configViewModel: ConfigurationViewModel = viewModel()) {
                         context.startActivity(intent)
                         activity?.finish()
                     },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.LightGray,
-                        contentColor = Color.Black
-                    ),
-                    modifier = Modifier.width(150.dp),
+                    colors = ButtonDefaults.buttonColors(Color.LightGray),
+                    modifier = Modifier.width(240.dp).height(50.dp),
                     elevation = ButtonDefaults.buttonElevation(4.dp)
                 ) {
-                    Text(text = stringResource(R.string.ButtonStarted))
+                    Text(text = stringResource(R.string.ButtonStarted),
+                        color = Color.Black,
+                        fontSize = 18.sp
+                    )
                 }
             }
         }
 
-        Box(modifier = Modifier.fillMaxWidth().height(90.dp).background(Color(0xFF2196F7)))
+        Box(modifier = Modifier.fillMaxWidth().height(100.dp).background(Color(0xFF2196F7)))
     }
 }
 

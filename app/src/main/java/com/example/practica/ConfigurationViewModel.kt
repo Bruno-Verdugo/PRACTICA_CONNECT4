@@ -8,9 +8,7 @@ import androidx.lifecycle.ViewModel
 
 class ConfigurationViewModel : ViewModel() {
 
-    var title by mutableStateOf("CONFIGURACIÓ")
-        private set
-    var alias by mutableStateOf("p1")
+    var alias by mutableStateOf("")
         private set
 
     var columns by mutableIntStateOf(7)

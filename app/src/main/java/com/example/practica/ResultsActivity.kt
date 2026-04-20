@@ -56,18 +56,18 @@ fun ResultsScreen(alias: String, columns: Int, timeLeft: Int, result: String) {
     val currentDate = dateFormat.format(Date())
 
     val timeControlled = timeLeft > 0 || result == "TEMPS ESGOTAT"
-    val timeSpent = if (timeControlled) 30 - timeLeft else 0
+    val timeSpent = if (timeControlled) 45 - timeLeft else 0
 
-    val commonLog = "Alias: $alias\nMida graella: $columns Temps Total: $timeSpent segons.\n"
+    val commonLog = "Alias: $alias\n Mida graella: $columns, Temps Total: $timeSpent segons.\n"
     val specificLog = when (result) {
         "HAS GUANYAT" -> {
-            var log = "Has guanyat !"
-            if (timeControlled) log += "\nHan sobrat $timeLeft segons. !"
+            var log = "Has guanyat!"
+            if (timeControlled) log += "\nHan sobrat $timeLeft segons!"
             log
         }
-        "GUANYA LA MÀQUINA" -> "Ha guanyat la màquina !!"
-        "EMPAT" -> "Heu empatat !!"
-        "TEMPS ESGOTAT" -> "Has esgotat el temps !!"
+        "GUANYA LA MÀQUINA" -> "Ha guanyat la màquina!"
+        "EMPAT" -> "Heu empatat!"
+        "TEMPS ESGOTAT" -> "Has esgotat el temps!"
         else -> ""
     }
     val finalLog = commonLog + specificLog
@@ -86,13 +86,14 @@ fun ResultsScreen(alias: String, columns: Int, timeLeft: Int, result: String) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().height(90.dp).background(Color(0xFF2196F7)).padding(horizontal = 16.dp),
+            modifier = Modifier.fillMaxWidth().height(100.dp).background(Color(0xFF2196F7)).padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = stringResource(R.string.ButtonGameResults),
+                modifier = Modifier.padding(37.dp),
                 color = Color.White,
-                fontSize = 20.sp,
+                fontSize = 27.sp,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -125,22 +126,23 @@ fun ResultsScreen(alias: String, columns: Int, timeLeft: Int, result: String) {
             singleLine = true
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(60.dp))
 
         Button(
             onClick = {
                 val intent = Intent(Intent.ACTION_SENDTO)
-                    intent.data = Uri.parse("mailto:")
-                    intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(emailText))
-                    intent.putExtra(Intent.EXTRA_SUBJECT, "Log - $dateText")
-                    intent.putExtra(Intent.EXTRA_TEXT, logText)
-
+                intent.data = Uri.parse("mailto:")
+                intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(emailText))
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Log - $dateText")
+                intent.putExtra(Intent.EXTRA_TEXT, logText)
                 context.startActivity(Intent.createChooser(intent, "Enviar correu..."))
             },
             modifier = Modifier.fillMaxWidth(0.6f),
             colors = ButtonDefaults.buttonColors(Color.LightGray)
         ) {
-            Text(stringResource(R.string.ButtonSendMail), color = Color.Black)
+            Text(stringResource(R.string.ButtonSendMail),
+                color = Color.Black
+            )
         }
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -155,7 +157,9 @@ fun ResultsScreen(alias: String, columns: Int, timeLeft: Int, result: String) {
             modifier = Modifier.fillMaxWidth(0.6f),
             colors = ButtonDefaults.buttonColors(Color.LightGray)
         ) {
-            Text(stringResource(R.string.ButtonNewGame), color = Color.Black)
+            Text(stringResource(R.string.ButtonNewGame),
+                color = Color.Black
+            )
         }
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -172,9 +176,9 @@ fun ResultsScreen(alias: String, columns: Int, timeLeft: Int, result: String) {
             )
         }
 
-        Spacer(modifier = Modifier.height(127.dp))
+        Spacer(modifier = Modifier.height(78.dp))
 
-        Box(modifier = Modifier.fillMaxWidth().height(90.dp).background(Color(0xFF2196F7)))
+        Box(modifier = Modifier.fillMaxWidth().height(100.dp).background(Color(0xFF2196F7)))
     }
 }
 

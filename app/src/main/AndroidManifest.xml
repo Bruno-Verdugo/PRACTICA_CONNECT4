@@ -12,21 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PRACTICA">
         <activity
-            android:name=".GameViewModel"
-            android:exported="false"
-            android:label="@string/title_activity_game_view_model"
-            android:theme="@style/Theme.PRACTICA" />
-        <activity
-            android:name=".GameLogic"
-            android:exported="false"
-            android:label="@string/title_activity_game_logic"
-            android:theme="@style/Theme.PRACTICA" />
-        <activity
-            android:name=".MainViewModel"
-            android:exported="false"
-            android:label="@string/title_activity_main_view_model"
-            android:theme="@style/Theme.PRACTICA" />
-        <activity
             android:name=".GameActivity"
             android:exported="false"
             android:label="@string/title_activity_game"
@@ -53,7 +38,6 @@
             android:theme="@style/Theme.PRACTICA">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
