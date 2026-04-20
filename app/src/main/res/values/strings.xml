@@ -4,6 +4,12 @@
     <string name="title_activity_configuration">ConfigurationActivity</string>
     <string name="title_activity_help">HelpActivity</string>
     <string name="title_activity_game">GameActivity</string>
+    <string name="title_activity_main_view_model">MainViewModel</string>
+    <string name="title_activity_game_logic">GameLogic</string>
+    <string name="title_activity_game_view_model">GameViewModel</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_configuration_view_model">ConfigurationViewModel</string>
+    <string name="title_activity_help_view_model">HelpViewModel</string>
     <string name="ButtonHelp">Ajuda</string>
     <string name="ButtonStart">Començar partida</string>
     <string name="ButtonExit">Sortir</string>
@@ -12,5 +18,16 @@
     <string name="ButtonBoard">Mida graella</string>
     <string name="ButtonTime">Control del temps</string>
     <string name="ButtonStarted">Començar</string>
-    <string name="title_activity_main_view_model">MainViewModel</string>
+    <string name="ButtonPlayer">El teu torn (Vermell)</string>
+    <string name="ButtonSystem">Torn de la màquina (Groc)</string>
+    <string name="ButtonWinPLayer">HAS GUANYAT!</string>
+    <string name="ButtonWinSystem">GUANYA LA MÀQUINA!</string>
+    <string name="ButtonDraw">EMPAT!</string>
+    <string name="ButtonFinishTime">TEMPS ESGOTAT!</string>
+    <string name="ButtonGameResults">RESULTATS PARTIDA</string>
+    <string name="ButtonSendMail">Enviar e-mail</string>
+    <string name="ButtonNewGame">Nova Partida</string>
+    <string name="ButtonDayAndHour">Dia i Hora</string>
+    <string name="ButtonLogs">Valors del Log</string>
+    <string name="ButtonDestinationMail">E-mail destinatari</string>
 </resources>

@@ -173,7 +173,7 @@ fun ConfigurationScreen(configViewModel: ConfigurationViewModel = viewModel()) {
             }
         }
 
-        Box(modifier = Modifier.fillMaxWidth().height(100.dp).background(Color(0xFF2196F7)))
+        Box(modifier = Modifier.fillMaxWidth().height(90.dp).background(Color(0xFF2196F7)))
     }
 }
 
