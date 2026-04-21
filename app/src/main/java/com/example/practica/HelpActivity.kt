@@ -56,8 +56,8 @@ fun HelpScreen(helpViewModel: HelpViewModel = viewModel()) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ayuda),
-                contentDescription = "Botón ayuda",
+                painter = painterResource(id = R.drawable.help),
+                contentDescription = "Ajuda",
                 modifier = Modifier.size(35.dp)
             )
 

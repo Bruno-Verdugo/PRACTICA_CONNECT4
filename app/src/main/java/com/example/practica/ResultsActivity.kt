@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -16,6 +17,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -140,6 +142,12 @@ fun ResultsScreen(alias: String, columns: Int, timeLeft: Int, result: String) {
             modifier = Modifier.fillMaxWidth(0.6f),
             colors = ButtonDefaults.buttonColors(Color.LightGray)
         ) {
+            Image(
+                painter = painterResource(id = R.drawable.email),
+                contentDescription = "E-mail",
+                modifier = Modifier.size(25.dp).padding(end = 5.dp)
+            )
+
             Text(stringResource(R.string.ButtonSendMail),
                 color = Color.Black
             )
@@ -157,6 +165,12 @@ fun ResultsScreen(alias: String, columns: Int, timeLeft: Int, result: String) {
             modifier = Modifier.fillMaxWidth(0.6f),
             colors = ButtonDefaults.buttonColors(Color.LightGray)
         ) {
+            Image(
+                painter = painterResource(id = R.drawable.play),
+                contentDescription = "Jugar de nou",
+                modifier = Modifier.size(25.dp)
+            )
+
             Text(stringResource(R.string.ButtonNewGame),
                 color = Color.Black
             )
@@ -171,6 +185,12 @@ fun ResultsScreen(alias: String, columns: Int, timeLeft: Int, result: String) {
             modifier = Modifier.fillMaxWidth(0.6f),
             colors = ButtonDefaults.buttonColors(Color.LightGray)
         ) {
+            Image(
+                painter = painterResource(id = R.drawable.exit),
+                contentDescription = "Sortir",
+                modifier = Modifier.size(25.dp).padding(end = 5.dp)
+            )
+
             Text(stringResource(R.string.ButtonExit),
                 color = Color.Black
             )

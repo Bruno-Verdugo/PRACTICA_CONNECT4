@@ -52,8 +52,8 @@ fun ConfigurationScreen(configViewModel: ConfigurationViewModel = viewModel()) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = R.drawable.configuracion),
-                contentDescription = "Configuración",
+                painter = painterResource(id = R.drawable.configuration),
+                contentDescription = "Configuració",
                 modifier = Modifier.size(33.dp)
             )
 
@@ -80,7 +80,7 @@ fun ConfigurationScreen(configViewModel: ConfigurationViewModel = viewModel()) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.persona),
+                    painter = painterResource(id = R.drawable.person),
                     contentDescription = "Persona",
                     modifier = Modifier.size(30.dp)
                 )
@@ -101,7 +101,7 @@ fun ConfigurationScreen(configViewModel: ConfigurationViewModel = viewModel()) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
                     painter = painterResource(id = R.drawable.connect4),
-                    contentDescription = "Tablero",
+                    contentDescription = "Tauler",
                     modifier = Modifier.size(35.dp)
                 )
 
@@ -141,8 +141,8 @@ fun ConfigurationScreen(configViewModel: ConfigurationViewModel = viewModel()) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.reloj),
-                    contentDescription = "Tiempo",
+                    painter = painterResource(id = R.drawable.watch),
+                    contentDescription = "Temps",
                     modifier = Modifier.size(33.dp)
                 )
 

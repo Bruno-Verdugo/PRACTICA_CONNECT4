@@ -55,7 +55,7 @@ fun PrincipalScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.mando),
+                    painter = painterResource(id = R.drawable.controller),
                     contentDescription = "Mando",
                     modifier = Modifier.size(35.dp)
                 )
@@ -90,6 +90,12 @@ fun PrincipalScreen() {
                 modifier = Modifier.width(240.dp).height(50.dp),
                 elevation = ButtonDefaults.buttonElevation(4.dp)
             ) {
+                Image(
+                    painter = painterResource(id = R.drawable.help),
+                    contentDescription = "Ajuda",
+                    modifier = Modifier.size(25.dp)
+                )
+
                 Text(text = stringResource(R.string.ButtonHelp),
                     fontSize = 18.sp,
                     color = Color.Black)
@@ -121,6 +127,12 @@ fun PrincipalScreen() {
                 modifier = Modifier.width(240.dp).height(50.dp),
                 elevation = ButtonDefaults.buttonElevation(4.dp)
             ) {
+                Image(
+                    painter = painterResource(id = R.drawable.exit),
+                    contentDescription = "Sortir",
+                    modifier = Modifier.size(25.dp).padding(end = 5.dp)
+                )
+
                 Text(text = stringResource(R.string.ButtonExit),
                     fontSize = 18.sp,
                     color = Color.Black
