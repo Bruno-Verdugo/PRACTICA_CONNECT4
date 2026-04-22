@@ -2,6 +2,7 @@ package com.example.practica
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,20 +13,18 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.key
 import android.widget.Toast
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.LocalConfiguration
 import kotlinx.coroutines.delay
 import com.example.practica.ui.theme.PRACTICATheme
 
@@ -54,108 +53,140 @@ fun GameScreen(alias: String, columns: Int, time: Boolean, gameViewModel: GameVi
     val context = LocalContext.current
     val activity = context as? Activity
 
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
     LaunchedEffect(Unit) {
         if (!gameViewModel.isBoardCreated) {
             gameViewModel.startGame(columns, time)
         }
     }
 
+    LaunchedEffect(gameViewModel.columnFullTrigger) {
+        if (gameViewModel.columnFullTrigger > 0) {
+            Toast.makeText(context,
+                "Columna plena! Escull una altra.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
 
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth().height(100.dp).background(Color(0xFF2196F7)).padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+    LaunchedEffect(gameViewModel.status) {
+        if (gameViewModel.status != GameStatus.PLAYING) {
+            delay(1000L)
+
+            val intent = Intent(context, ResultsActivity::class.java)
+            intent.putExtra("ALIAS", alias)
+            intent.putExtra("COLUMNS", columns)
+            intent.putExtra("TIME-LEFT", gameViewModel.timeLeft)
+            intent.putExtra("RESULT", gameViewModel.finalResultText)
+            context.startActivity(intent)
+            activity?.finish()
+        }
+    }
+
+    if(isLandscape){
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Jugador: $alias",
-                color = Color.White,
-                fontSize = 23.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        val columnFullTrigger = gameViewModel.columnFullTrigger
-        LaunchedEffect(columnFullTrigger) {
-            if (columnFullTrigger > 0) {
-                Toast.makeText(context,
-                    "Columna plena! Escull una altra.",
-                    Toast.LENGTH_SHORT
-                ).show()
+            Row(
+                modifier = Modifier.fillMaxWidth().height(70.dp).background(Color(0xFF2196F7)).padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    "Jugador: $alias",
+                    color = Color.White,
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.Bold
+                )
             }
-        }
 
-        val statusText = when (gameViewModel.status) {
-            GameStatus.PLAYING -> if (gameViewModel.currentTurn == Player.HUMAN) stringResource(R.string.ButtonPlayer) else stringResource(R.string.ButtonSystem)
-            GameStatus.WON -> if (gameViewModel.winner == Player.HUMAN) stringResource(R.string.ButtonWinPLayer) else stringResource(R.string.ButtonWinSystem)
-            GameStatus.DRAW -> stringResource(R.string.ButtonDraw)
-            GameStatus.TIME_OUT -> stringResource(R.string.ButtonFinishTime)
-        }
+            Row(
+                modifier = Modifier.fillMaxWidth().weight(1f).padding(vertical = 10.dp, horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(
+                    modifier = Modifier.weight(0.4f).padding(horizontal = 8.dp)
+                ) {
+                    Text(
+                        text = gameViewModel.statusText,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
 
-        val gameStatus = gameViewModel.status
-        LaunchedEffect(gameStatus) {
-            if (gameStatus != GameStatus.PLAYING) {
-                delay(1000L)
+                    Spacer(modifier = Modifier.height(25.dp))
 
-                val intent = Intent(context, ResultsActivity::class.java)
-                intent.putExtra("ALIAS", alias)
-                intent.putExtra("COLUMNS", columns)
-                intent.putExtra("TIME-LEFT", gameViewModel.timeLeft)
-
-                val resultadoStr = when {
-                    gameViewModel.winner == Player.HUMAN -> "HAS GUANYAT"
-                    gameViewModel.winner == Player.SYSTEM -> "GUANYA LA MÀQUINA"
-                    gameStatus == GameStatus.DRAW -> "EMPAT"
-                    gameStatus == GameStatus.TIME_OUT -> "TEMPS ESGOTAT"
-                    else -> "ERROR"
+                    Text(
+                        text = gameViewModel.timeText,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = gameViewModel.timeColor
+                    )
                 }
-                intent.putExtra("RESULT", resultadoStr)
-                context.startActivity(intent)
-                activity?.finish()
+
+                Column(
+                    modifier = Modifier.weight(0.8f).fillMaxHeight().padding(bottom = 16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    if (gameViewModel.isBoardCreated) {
+                        Box(
+                            modifier = Modifier.fillMaxHeight().aspectRatio(1f)
+                        ) {
+                            BoardView(gameViewModel = gameViewModel, columns = columns)
+                        }
+                    }
+                }
             }
         }
+    } else {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth().height(100.dp).background(Color(0xFF2196F7)).padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    "Jugador: $alias",
+                    color = Color.White,
+                    fontSize = 23.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
 
-        val timeText = if (gameViewModel.isTimeEnabled) {
-            "${gameViewModel.timeLeft} segons."
-        } else {
-            "No hi ha temps limit."
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = gameViewModel.statusText,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
+            )
+
+            Spacer(modifier = Modifier.height(25.dp))
+
+            Text(
+                text = gameViewModel.timeText,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = gameViewModel.timeColor
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            if (gameViewModel.isBoardCreated) {
+                BoardView(gameViewModel = gameViewModel, columns = columns)
+            }
+
+            Spacer(modifier = Modifier.height(165.dp))
+
+            Box(modifier = Modifier.fillMaxWidth().height(100.dp).background(Color(0xFF2196F7)))
         }
-
-        val timeColor = if (gameViewModel.isTimeEnabled) {
-            Color.Red
-        } else {
-            Color.Blue
-        }
-
-        Text(
-            text = statusText,
-            fontSize = 22.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black
-        )
-
-        Spacer(modifier = Modifier.height(25.dp))
-
-        Text(
-            text = timeText,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            color = timeColor
-        )
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        if (gameViewModel.isBoardCreated) {
-            BoardView(gameViewModel = gameViewModel, columns = columns)
-        }
-
-        Spacer(modifier = Modifier.height(165.dp))
-
-        Box(modifier = Modifier.fillMaxWidth().height(100.dp).background(Color(0xFF2196F7)))
     }
 }
 
@@ -164,12 +195,12 @@ fun BoardView(gameViewModel: GameViewModel, columns: Int) {
 
     key(gameViewModel.boardUpdateTrigger) {
         Row(
-            modifier = Modifier.background(Color.Blue).padding(8.dp),
+            modifier = Modifier.fillMaxWidth().background(Color.Blue).padding(4.dp),
             horizontalArrangement = Arrangement.Center
         ) {
             for (col in 0 until columns) {
                 Column(
-                    modifier = Modifier.clickable(
+                    modifier = Modifier.weight(1f).clickable(
                         enabled = (gameViewModel.status == GameStatus.PLAYING && gameViewModel.currentTurn == Player.HUMAN)
                     ) {
                         gameViewModel.drop(col)
@@ -183,31 +214,10 @@ fun BoardView(gameViewModel: GameViewModel, columns: Int) {
                             Player.SYSTEM -> Color.Yellow
                         }
 
-                        Box(modifier = Modifier.padding(4.dp).size(45.dp).clip(CircleShape).background(circleColor))
+                        Box(modifier = Modifier.fillMaxWidth().padding(2.dp).aspectRatio(1f).clip(CircleShape).background(circleColor))
                     }
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun GameScreenPreview() {
-    PRACTICATheme(darkTheme = false) {
-        val previewViewModel = remember {
-            GameViewModel().apply {
-                startGame(columns = 7, false)
-                drop(col = 3)
-                drop(col = 4)
-                drop(col = 3)
-            }
-        }
-        GameScreen(
-            alias = "Bruno",
-            columns = 7,
-            time = false,
-            gameViewModel = previewViewModel
-        )
     }
 }

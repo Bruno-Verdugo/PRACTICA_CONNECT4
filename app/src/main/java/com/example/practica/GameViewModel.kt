@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -45,6 +46,9 @@ class GameViewModel : ViewModel() {
     var columnFullTrigger by mutableIntStateOf(0)
         private set
 
+    var finalResultText by mutableStateOf("")
+        private set
+
 
     fun startGame(columns: Int, time: Boolean) {
         board = Board(columns)
@@ -54,6 +58,7 @@ class GameViewModel : ViewModel() {
         boardUpdateTrigger = 0
         isBoardCreated = true
         isTimeEnabled = time
+        finalResultText = ""
         if (isTimeEnabled) {
             manageTime(45)
         }
@@ -71,9 +76,11 @@ class GameViewModel : ViewModel() {
                 status = GameStatus.WON
                 winner = currentTurn
                 timerJob?.cancel()
+                prepareResult("HAS GUANYAT", "GUANYA LA MÀQUINA")
             } else if (!board.hasValidMoves()) {
                 status = GameStatus.DRAW
                 timerJob?.cancel()
+                finalResultText = "EMPAT"
             } else {
                 toggleTurn()
             }
@@ -82,6 +89,10 @@ class GameViewModel : ViewModel() {
                 columnFullTrigger++
             }
         }
+    }
+
+    private fun prepareResult(humanText: String, systemText: String) {
+        finalResultText = if (winner == Player.HUMAN) humanText else systemText
     }
 
     private fun manageTime(seconds: Int) {
@@ -95,6 +106,7 @@ class GameViewModel : ViewModel() {
 
                 if (timeLeft == 0 && status == GameStatus.PLAYING) {
                     status = GameStatus.TIME_OUT
+                    finalResultText = "TEMPS ESGOTAT"
                 }
             }
         }
@@ -125,4 +137,25 @@ class GameViewModel : ViewModel() {
         }
     }
 
+    val statusText: String
+        get() = when (status) {
+            GameStatus.PLAYING -> if (currentTurn == Player.HUMAN) "El teu torn (Vermell)" else "Torn de la màquina (Groc)"
+            GameStatus.WON -> if (winner == Player.HUMAN) "HAS GUANYAT!" else "GUANYA LA MÀQUINA!"
+            GameStatus.DRAW -> "EMPAT!"
+            GameStatus.TIME_OUT -> "TEMPS ESGOTAT!"
+        }
+
+    val timeText: String
+        get() = if (isTimeEnabled) {
+            "${timeLeft} segons."
+        } else {
+            "No hi ha temps limit"
+        }
+
+    val timeColor: Color
+        get() = if (isTimeEnabled) {
+            Color.Red
+        } else {
+            Color.Blue
+        }
 }

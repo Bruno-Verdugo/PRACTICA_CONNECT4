@@ -23,7 +23,6 @@ class ConfigurationViewModel : ViewModel() {
 
     fun onColumnsChange(newColumns: Int) {
         columns = newColumns
-
     }
 
     fun onTimeChange(active: Boolean) {

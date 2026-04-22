@@ -15,12 +15,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.practica.ui.theme.PRACTICATheme
 import androidx.compose.foundation.Image
 import androidx.compose.ui.res.painterResource
+import android.content.res.Configuration
+import androidx.compose.ui.platform.LocalConfiguration
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,119 +44,227 @@ fun PrincipalScreen() {
     val context = LocalContext.current
     val activity = context as? Activity
 
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-        Box(modifier = Modifier.fillMaxWidth().height(100.dp).background(Color(0xFF2196F7)).padding(horizontal = 16.dp)) {
+    if (isLandscape) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
 
-            Column(
-                modifier = Modifier.align(Alignment.CenterStart),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.controller),
-                    contentDescription = "Mando",
-                    modifier = Modifier.size(35.dp)
-                )
+            Box(modifier = Modifier.fillMaxWidth().height(70.dp).background(Color(0xFF2196F7)).padding(horizontal = 16.dp)) {
+
+                Column(
+                    modifier = Modifier.align(Alignment.CenterStart),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.controller),
+                        contentDescription = "Mando",
+                        modifier = Modifier.size(25.dp)
+                    )
+                    Text(
+                        text = stringResource(R.string.main_gametitle),
+                        fontSize = 11.sp,
+                        color = Color.White
+                    )
+                }
+
                 Text(
-                    text = stringResource(R.string.main_gametitle),
-                    fontSize = 14.sp,
+                    text = stringResource(R.string.main_title),
+                    modifier = Modifier.align(Alignment.Center),
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
                     color = Color.White
                 )
             }
 
-            Text(
-                text = stringResource(R.string.main_title),
-                modifier = Modifier.align(Alignment.Center),
-                fontSize = 27.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-        }
+            Row(
+                modifier = Modifier.fillMaxWidth().weight(1f).padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Button(
+                        onClick = {
+                            val intent = Intent(context, HelpActivity::class.java)
+                            context.startActivity(intent)
+                            activity?.finish()
+                        },
+                        colors = ButtonDefaults.buttonColors(Color.LightGray),
+                        modifier = Modifier.width(220.dp).height(45.dp),
+                        elevation = ButtonDefaults.buttonElevation(4.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.help),
+                            contentDescription = "Ajuda",
+                            modifier = Modifier.size(20.dp)
+                        )
 
+                        Spacer(modifier = Modifier.width(8.dp))
+
+                        Text(text = stringResource(R.string.ButtonHelp),
+                            fontSize = 16.sp,
+                            color = Color.Black
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Button(
+                        onClick = {
+                            val intent = Intent(context, ConfigurationActivity::class.java)
+                            context.startActivity(intent)
+                            activity?.finish()
+                        },
+                        colors = ButtonDefaults.buttonColors(Color.LightGray),
+                        modifier = Modifier.width(220.dp).height(45.dp),
+                        elevation = ButtonDefaults.buttonElevation(4.dp)
+                    ) {
+                        Text(text = stringResource(R.string.ButtonStart),
+                            fontSize = 16.sp,
+                            color = Color.Black
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Button(
+                        onClick = { activity?.finish() },
+                        colors = ButtonDefaults.buttonColors(Color.LightGray),
+                        modifier = Modifier.width(220.dp).height(45.dp),
+                        elevation = ButtonDefaults.buttonElevation(4.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.exit),
+                            contentDescription = "Sortir",
+                            modifier = Modifier.size(20.dp)
+                        )
+
+                        Spacer(modifier = Modifier.width(8.dp))
+
+                        Text(text = stringResource(R.string.ButtonExit),
+                            fontSize = 16.sp,
+                            color = Color.Black
+                        )
+                    }
+                }
+
+                Image(
+                    painter = painterResource(id = R.drawable.connect4),
+                    contentDescription = "Logo Connect 4",
+                    modifier = Modifier.fillMaxHeight(0.8f).width(200.dp)
+                )
+            }
+
+            Box(modifier = Modifier.fillMaxWidth().height(60.dp).background(Color(0xFF2196F7)))
+        }
+    } else {
         Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
+            Box(modifier = Modifier.fillMaxWidth().height(100.dp).background(Color(0xFF2196F7)).padding(horizontal = 16.dp)) {
 
-            Button(
-                onClick = {
-                    val intent = Intent(context, HelpActivity::class.java)
-                    context.startActivity(intent)
-                    activity?.finish()
-                },
-                colors = ButtonDefaults.buttonColors(Color.LightGray),
-                modifier = Modifier.width(240.dp).height(50.dp),
-                elevation = ButtonDefaults.buttonElevation(4.dp)
+                Column(
+                    modifier = Modifier.align(Alignment.CenterStart),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.controller),
+                        contentDescription = "Mando",
+                        modifier = Modifier.size(35.dp)
+                    )
+
+                    Text(
+                        text = stringResource(R.string.main_gametitle),
+                        fontSize = 14.sp,
+                        color = Color.White
+                    )
+                }
+
+                Text(
+                    text = stringResource(R.string.main_title),
+                    modifier = Modifier.align(Alignment.Center),
+                    fontSize = 27.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+            }
+
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Button(
+                    onClick = {
+                        val intent = Intent(context, HelpActivity::class.java)
+                        context.startActivity(intent)
+                        activity?.finish()
+                    },
+                    colors = ButtonDefaults.buttonColors(Color.LightGray),
+                    modifier = Modifier.width(240.dp).height(50.dp),
+                    elevation = ButtonDefaults.buttonElevation(4.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.help),
+                        contentDescription = "Ajuda",
+                        modifier = Modifier.size(25.dp)
+                    )
+
+                    Text(text = stringResource(R.string.ButtonHelp),
+                        fontSize = 18.sp,
+                        color = Color.Black)
+                }
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Button(
+                    onClick = {
+                        val intent = Intent(context, ConfigurationActivity::class.java)
+                        context.startActivity(intent)
+                        activity?.finish()
+                    },
+                    colors = ButtonDefaults.buttonColors(Color.LightGray),
+                    modifier = Modifier.width(240.dp).height(50.dp),
+                    elevation = ButtonDefaults.buttonElevation(4.dp)
+                ) {
+                    Text(text = stringResource(R.string.ButtonStart),
+                        fontSize = 18.sp,
+                        color = Color.Black
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Button(
+                    onClick = { activity?.finish() },
+                    colors = ButtonDefaults.buttonColors(Color.LightGray),
+                    modifier = Modifier.width(240.dp).height(50.dp),
+                    elevation = ButtonDefaults.buttonElevation(4.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.exit),
+                        contentDescription = "Sortir",
+                        modifier = Modifier.size(25.dp).padding(end = 5.dp)
+                    )
+
+                    Text(text = stringResource(R.string.ButtonExit),
+                        fontSize = 18.sp,
+                        color = Color.Black
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(50.dp))
+
                 Image(
-                    painter = painterResource(id = R.drawable.help),
-                    contentDescription = "Ajuda",
-                    modifier = Modifier.size(25.dp)
-                )
-
-                Text(text = stringResource(R.string.ButtonHelp),
-                    fontSize = 18.sp,
-                    color = Color.Black)
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Button(
-                onClick = {
-                    val intent = Intent(context, ConfigurationActivity::class.java)
-                    context.startActivity(intent)
-                    activity?.finish()
-                },
-                colors = ButtonDefaults.buttonColors(Color.LightGray),
-                modifier = Modifier.width(240.dp).height(50.dp),
-                elevation = ButtonDefaults.buttonElevation(4.dp)
-            ) {
-                Text(text = stringResource(R.string.ButtonStart),
-                    fontSize = 18.sp,
-                    color = Color.Black
+                    painter = painterResource(id = R.drawable.connect4),
+                    contentDescription = "Logo Connect 4",
+                    modifier = Modifier.fillMaxWidth(0.8f).height(180.dp)
                 )
             }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Button(
-                onClick = { activity?.finish() },
-                colors = ButtonDefaults.buttonColors(Color.LightGray),
-                modifier = Modifier.width(240.dp).height(50.dp),
-                elevation = ButtonDefaults.buttonElevation(4.dp)
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.exit),
-                    contentDescription = "Sortir",
-                    modifier = Modifier.size(25.dp).padding(end = 5.dp)
-                )
-
-                Text(text = stringResource(R.string.ButtonExit),
-                    fontSize = 18.sp,
-                    color = Color.Black
-                )
-            }
-
-            Spacer(modifier = Modifier.height(50.dp))
-
-            Image(
-                painter = painterResource(id = R.drawable.connect4),
-                contentDescription = "Logo Connect 4",
-                modifier = Modifier.fillMaxWidth(0.8f).height(180.dp)
-            )
+            Box(modifier = Modifier.fillMaxWidth().height(100.dp).background(Color(0xFF2196F7)))
         }
-
-        Box(modifier = Modifier.fillMaxWidth().height(100.dp).background(Color(0xFF2196F7)))
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun MenuPrincipalPreview() {
-    PRACTICATheme(darkTheme = false) {
-        PrincipalScreen()
     }
 }
