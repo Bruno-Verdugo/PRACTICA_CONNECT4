@@ -1,11 +1,12 @@
-package com.example.practica
+package com.example.practica.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 class ResultsViewModel : ViewModel() {
     var dateText by mutableStateOf("")

@@ -1,4 +1,4 @@
-package com.example.practica
+package com.example.practica.iu
 
 import android.app.Activity
 import android.content.Intent
@@ -24,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.practica.R
 import com.example.practica.ui.theme.PRACTICATheme
 
 class HelpActivity : ComponentActivity() {

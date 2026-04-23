@@ -1,4 +1,4 @@
-package com.example.practica
+package com.example.practica.iu
 
 import android.app.Activity
 import android.content.Intent
@@ -22,6 +22,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.ui.res.painterResource
 import android.content.res.Configuration
 import androidx.compose.ui.platform.LocalConfiguration
+import com.example.practica.R
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

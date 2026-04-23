@@ -1,4 +1,4 @@
-package com.example.practica
+package com.example.practica.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.compose.runtime.getValue
@@ -7,6 +7,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
+import com.example.practica.model.Board
+import com.example.practica.model.Player
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

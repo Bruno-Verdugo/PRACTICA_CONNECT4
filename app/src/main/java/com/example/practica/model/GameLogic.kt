@@ -1,4 +1,4 @@
-package com.example.practica
+package com.example.practica.model
 
 import kotlin.math.abs
 import kotlin.math.max
@@ -38,7 +38,7 @@ enum class Player {
     NONE, HUMAN, SYSTEM
 }
 
-class Board(val size: Int) {
+class Board(size: Int) {
 
     val columns = size
     val rows = size

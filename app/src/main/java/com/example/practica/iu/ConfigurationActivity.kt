@@ -1,4 +1,4 @@
-package com.example.practica
+package com.example.practica.iu
 
 import android.app.Activity
 import android.content.Intent
@@ -24,7 +24,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.material3.*
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import com.example.practica.R
+import com.example.practica.model.AppConstants
 import com.example.practica.ui.theme.PRACTICATheme
+import com.example.practica.viewmodel.ConfigurationViewModel
 
 class ConfigurationActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -175,9 +178,9 @@ fun ConfigurationScreen(configViewModel: ConfigurationViewModel = viewModel()) {
                     Button(
                         onClick = {
                             val intent = Intent(context, GameActivity::class.java)
-                            intent.putExtra("ALIAS", configViewModel.alias)
-                            intent.putExtra("COLUMNS", configViewModel.columns)
-                            intent.putExtra("TIME", configViewModel.time)
+                            intent.putExtra(AppConstants.ALIAS, configViewModel.alias)
+                            intent.putExtra(AppConstants.COLUMNS, configViewModel.columns)
+                            intent.putExtra(AppConstants.TIME, configViewModel.time)
                             context.startActivity(intent)
                             activity?.finish()
                         },
@@ -316,9 +319,9 @@ fun ConfigurationScreen(configViewModel: ConfigurationViewModel = viewModel()) {
                         Button(
                             onClick = {
                                 val intent = Intent(context, GameActivity::class.java)
-                                intent.putExtra("ALIAS", configViewModel.alias)
-                                intent.putExtra("COLUMNS", configViewModel.columns)
-                                intent.putExtra("TIME", configViewModel.time)
+                                intent.putExtra(AppConstants.ALIAS, configViewModel.alias)
+                                intent.putExtra(AppConstants.COLUMNS, configViewModel.columns)
+                                intent.putExtra(AppConstants.TIME, configViewModel.time)
                                 context.startActivity(intent)
                                 activity?.finish()
                             },

@@ -1,4 +1,4 @@
-package com.example.practica
+package com.example.practica.iu
 
 import android.app.Activity
 import android.content.Intent
@@ -27,16 +27,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.practica.R
+import com.example.practica.model.AppConstants
 import com.example.practica.ui.theme.PRACTICATheme
+import com.example.practica.viewmodel.ResultsViewModel
 
 class ResultsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val alias = intent.getStringExtra("ALIAS") ?: "Desconegut"
-        val columns = intent.getIntExtra("COLUMNS", 7)
-        val timeLeft = intent.getIntExtra("TIME-LEFT", 0)
-        val result = intent.getStringExtra("RESULT") ?: ""
+        val alias = intent.getStringExtra(AppConstants.ALIAS) ?: "Desconegut"
+        val columns = intent.getIntExtra(AppConstants.COLUMNS, 7)
+        val timeLeft = intent.getIntExtra(AppConstants.TIME_LEFT, 0)
+        val result = intent.getStringExtra(AppConstants.RESULT) ?: ""
 
         setContent {
             PRACTICATheme(darkTheme = false) {
@@ -130,9 +133,9 @@ fun ResultsScreen(alias: String, columns: Int, timeLeft: Int, result: String, re
                             val intent = Intent(Intent.ACTION_SENDTO)
                             intent.data = Uri.parse("mailto:")
                             intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(resultsViewModel.emailText))
-                            intent.putExtra(Intent.EXTRA_SUBJECT, "Log - ${resultsViewModel.dateText}")
+                            intent.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.emailSubject, resultsViewModel.dateText))
                             intent.putExtra(Intent.EXTRA_TEXT, resultsViewModel.logText)
-                            context.startActivity(Intent.createChooser(intent, "Enviar correu..."))
+                            context.startActivity(Intent.createChooser(intent, context.getString(R.string.resultsEmail)))
                         },
                         modifier = Modifier.width(220.dp),
                         colors = ButtonDefaults.buttonColors(Color.LightGray)

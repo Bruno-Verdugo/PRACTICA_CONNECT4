@@ -1,4 +1,4 @@
-package com.example.practica
+package com.example.practica.iu
 
 import android.app.Activity
 import android.content.Intent
@@ -25,16 +25,22 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.key
 import android.widget.Toast
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
+import com.example.practica.R
+import com.example.practica.model.AppConstants
+import com.example.practica.model.Player
 import kotlinx.coroutines.delay
 import com.example.practica.ui.theme.PRACTICATheme
+import com.example.practica.viewmodel.GameStatus
+import com.example.practica.viewmodel.GameViewModel
 
 class GameActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val alias = intent.getStringExtra("ALIAS") ?: "Jugador"
-        val columns = intent.getIntExtra("COLUMNS", 7)
-        val time = intent.getBooleanExtra("TIME", false)
+        val alias = intent.getStringExtra(AppConstants.ALIAS) ?: "Jugador"
+        val columns = intent.getIntExtra(AppConstants.COLUMNS, 7)
+        val time = intent.getBooleanExtra(AppConstants.TIME, false)
 
         setContent {
             PRACTICATheme(darkTheme = false) {
@@ -65,7 +71,7 @@ fun GameScreen(alias: String, columns: Int, time: Boolean, gameViewModel: GameVi
     LaunchedEffect(gameViewModel.columnFullTrigger) {
         if (gameViewModel.columnFullTrigger > 0) {
             Toast.makeText(context,
-                "Columna plena! Escull una altra.",
+                context.getString(R.string.columnFull),
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -76,10 +82,10 @@ fun GameScreen(alias: String, columns: Int, time: Boolean, gameViewModel: GameVi
             delay(1000L)
 
             val intent = Intent(context, ResultsActivity::class.java)
-            intent.putExtra("ALIAS", alias)
-            intent.putExtra("COLUMNS", columns)
-            intent.putExtra("TIME-LEFT", gameViewModel.timeLeft)
-            intent.putExtra("RESULT", gameViewModel.finalResultText)
+            intent.putExtra(AppConstants.ALIAS, alias)
+            intent.putExtra(AppConstants.COLUMNS, columns)
+            intent.putExtra(AppConstants.TIME_LEFT, gameViewModel.timeLeft)
+            intent.putExtra(AppConstants.RESULT, gameViewModel.finalResultText)
             context.startActivity(intent)
             activity?.finish()
         }
@@ -96,7 +102,7 @@ fun GameScreen(alias: String, columns: Int, time: Boolean, gameViewModel: GameVi
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    "Jugador: $alias",
+                    stringResource(R.string.playerLabel, alias),
                     color = Color.White,
                     fontSize = 17.sp,
                     fontWeight = FontWeight.Bold
@@ -152,7 +158,7 @@ fun GameScreen(alias: String, columns: Int, time: Boolean, gameViewModel: GameVi
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    "Jugador: $alias",
+                    stringResource(R.string.playerLabel, alias),
                     color = Color.White,
                     fontSize = 23.sp,
                     fontWeight = FontWeight.Bold
