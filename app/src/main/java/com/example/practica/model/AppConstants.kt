@@ -6,6 +6,5 @@ object AppConstants {
     const val TIME = "time"
     const val TIME_LEFT = "time_left"
     const val RESULT = "result"
-
     const val DIFFICULTY = "difficulty"
 }

@@ -25,7 +25,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.graphics.SolidColor
@@ -256,21 +255,5 @@ fun MainLandscapeLayout(onStart: () -> Unit, onHelp: () -> Unit, onExit: () -> U
             )
         }
         Box(modifier = Modifier.fillMaxWidth().height(50.dp).background(CardBg))
-    }
-}
-
-@Preview(showBackground = true, name = "Main Vertical", showSystemUi = true)
-@Composable
-fun MainActivityPreviewVertical() {
-    PRACTICATheme(darkTheme = false) {
-        PrincipalScreen()
-    }
-}
-
-@Preview(showBackground = true, name = "Main Horizontal", device = "spec:parent=pixel_5,orientation=landscape", showSystemUi = true)
-@Composable
-fun MainActivityPreviewHorizontal() {
-    PRACTICATheme(darkTheme = false) {
-        PrincipalScreen()
     }
 }

@@ -64,7 +64,7 @@ class GameViewModel : ViewModel() {
         finalResultText = ""
         difficulty = diff
         if (isTimeEnabled) {
-            manageTime(45)
+            manageTime()
         }
     }
 
@@ -75,12 +75,11 @@ class GameViewModel : ViewModel() {
 
         if (pos != null) {
             boardUpdateTrigger++
-
             if (board.maxConnected(pos) >= 4) {
                 status = GameStatus.WON
                 winner = currentTurn
                 timerJob?.cancel()
-                prepareResult("HAS GUANYAT", "GUANYA LA MÀQUINA")
+                prepareResult()
             } else if (!board.hasValidMoves()) {
                 status = GameStatus.DRAW
                 timerJob?.cancel()
@@ -95,19 +94,18 @@ class GameViewModel : ViewModel() {
         }
     }
 
-    private fun prepareResult(humanText: String, systemText: String) {
-        finalResultText = if (winner == Player.HUMAN) humanText else systemText
+    private fun prepareResult() {
+        finalResultText = if (winner == Player.HUMAN) "HAS GUANYAT" else "GUANYA LA MÀQUINA"
     }
 
-    private fun manageTime(seconds: Int) {
+    private fun manageTime() {
         timerJob?.cancel()
-        timeLeft = seconds
+        timeLeft = 45
 
         timerJob = viewModelScope.launch {
             while (timeLeft > 0 && status == GameStatus.PLAYING) {
                 delay(1000L)
                 timeLeft--
-
                 if (timeLeft == 0 && status == GameStatus.PLAYING) {
                     status = GameStatus.TIME_OUT
                     finalResultText = "TEMPS ESGOTAT"
@@ -137,7 +135,7 @@ class GameViewModel : ViewModel() {
         if (validColumns.isEmpty()) return
 
         val chosenColumn = when (difficulty) {
-            "Fàcil" -> validColumns.random()
+            "Fàcil" -> validColumns.random() // Lógica de dificultad fàcil
             "Mitjana" -> playMedium(validColumns)
             "Difícil" -> playHard(validColumns)
             else -> validColumns.random()
@@ -145,6 +143,7 @@ class GameViewModel : ViewModel() {
         drop(chosenColumn)
     }
 
+    // Lógica de dificultad mitja
     private fun playMedium(validColumns: List<Int>): Int {
         val winningMove = findWinningMove(Player.SYSTEM, validColumns)
         if (winningMove != -1) {
@@ -158,36 +157,21 @@ class GameViewModel : ViewModel() {
         return validColumns.random()
     }
 
+    // Lógica de dificultad difícil
     private fun playHard(validColumns: List<Int>): Int {
-        val winningMove = findWinningMove(Player.SYSTEM, validColumns)
-        if (winningMove != -1) {
-            return winningMove
-        }
+        findWinningMove(Player.SYSTEM, validColumns).let { if (it != -1) return it }
+        findWinningMove(Player.HUMAN, validColumns).let { if (it != -1) return it }
 
-        val blockingMove = findWinningMove(Player.HUMAN, validColumns)
-        if (blockingMove != -1) {
-            return blockingMove
-        }
+        val safeColumns = validColumns.filter { !givesOpponentWin(it) }
+        val columnsToConsider = safeColumns.ifEmpty { validColumns }
 
-        val safeColumns = validColumns.filter { col ->
-            !givesOpponentWin(col, Player.HUMAN)
-        }
-
-        val columnsToConsider = if (safeColumns.isNotEmpty()) {
-            safeColumns
-        } else {
-            validColumns
-        }
-
-        val threatMoves = columnsToConsider.filter { col ->
-            createsThreat(col, Player.SYSTEM)
-        }
-        if (threatMoves.isNotEmpty()) {
-            return threatMoves.random()
-        }
+        val threatMoves = columnsToConsider.filter { createsThreat(it) }
+        if (threatMoves.isNotEmpty()) return threatMoves.random()
 
         val centerCol = board.columns / 2
-        return columnsToConsider.sortedBy { kotlin.math.abs(it - centerCol) }.first()
+        val sortedByCenter = columnsToConsider.sortedBy { kotlin.math.abs(it - centerCol) }
+
+        return sortedByCenter.take(2).random()
     }
 
     private fun findWinningMove(playerToCheck: Player, validColumns: List<Int>): Int {
@@ -207,14 +191,14 @@ class GameViewModel : ViewModel() {
         return -1
     }
 
-    private fun givesOpponentWin(col: Int, opponent: Player): Boolean {
+    private fun givesOpponentWin(col: Int): Boolean {
         var isSuicide = false
         val row = board.firstEmptyRow(col)
         if (row != -1) {
             board.grid[row][col] = Player.SYSTEM
             val nextRow = row - 1
             if (nextRow >= 0) {
-                board.grid[nextRow][col] = opponent
+                board.grid[nextRow][col] = Player.HUMAN
                 val pos = com.example.practica.model.Position(nextRow, col)
                 if (board.maxConnected(pos) >= 4) {
                     isSuicide = true
@@ -226,17 +210,17 @@ class GameViewModel : ViewModel() {
         return isSuicide
     }
 
-    private fun createsThreat(col: Int, me: Player): Boolean {
+    private fun createsThreat(col: Int): Boolean {
         var createsWin = false
         val row = board.firstEmptyRow(col)
         if (row != -1) {
-            board.grid[row][col] = me
+            board.grid[row][col] = Player.SYSTEM
 
             val tempValid = mutableListOf<Int>()
             for (c in 0 until board.columns) {
                 if (board.firstEmptyRow(c) != -1) tempValid.add(c)
             }
-            if (findWinningMove(me, tempValid) != -1) {
+            if (findWinningMove(Player.SYSTEM, tempValid) != -1) {
                 createsWin = true
             }
 

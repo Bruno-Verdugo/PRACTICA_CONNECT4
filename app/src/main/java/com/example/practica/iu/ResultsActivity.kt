@@ -30,7 +30,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -325,21 +324,5 @@ fun ResultsLandscapeLayout(
             }
         }
         Spacer(modifier = Modifier.height(15.dp))
-    }
-}
-
-@Preview(showBackground = true, name = "Results Vertical", showSystemUi = true)
-@Composable
-fun ResultsActivityPreviewVertical() {
-    PRACTICATheme(darkTheme = true) {
-        ResultsScreen(alias = "Bruno", columns = 7, timeLeft = 15, result = "HAS GUANYAT", difficulty = "Fàcil")
-    }
-}
-
-@Preview(showBackground = true, name = "Results Horizontal", device = "spec:parent=pixel_5,orientation=landscape", showSystemUi = true)
-@Composable
-fun ResultsActivityPreviewHorizontal() {
-    PRACTICATheme(darkTheme = true) {
-        ResultsScreen(alias = "Bruno", columns = 7, timeLeft = 15, result = "HAS GUANYAT", difficulty = "Fàcil")
     }
 }

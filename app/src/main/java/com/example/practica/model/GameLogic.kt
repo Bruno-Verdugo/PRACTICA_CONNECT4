@@ -45,6 +45,7 @@ class Board(size: Int) {
 
     val grid = Array(rows) { Array(columns) { Player.NONE } }
 
+    // Busca el primer lloc lliure de la fila començant des de baix.
     fun firstEmptyRow(column: Int): Int {
         for (r in rows - 1 downTo 0) {
             if (grid[r][column] == Player.NONE) {
@@ -70,6 +71,8 @@ class Board(size: Int) {
         return false
     }
 
+    // Funció que calcula la línia més llarga cap a una direcció i l'oposada.
+    // S'utilitza per comprovar si algún dels jugadors ha conseguit juntar 4 fitxes i per tant guanyar la partida.
     fun maxConnected(position: Position): Int {
         val player = grid[position.row][position.column]
         if (player == Player.NONE) return 0
