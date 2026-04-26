@@ -17,6 +17,9 @@ class ConfigurationViewModel : ViewModel() {
     var time by mutableStateOf(false)
         private set
 
+    var difficulty by mutableStateOf("Fàcil")
+        private set
+
     fun onAliasChange(newAlias: String) {
         alias = newAlias
     }
@@ -27,5 +30,9 @@ class ConfigurationViewModel : ViewModel() {
 
     fun onTimeChange(active: Boolean) {
         time = active
+    }
+
+    fun onDifficultyChange(newDiff: String) {
+        difficulty = newDiff
     }
 }

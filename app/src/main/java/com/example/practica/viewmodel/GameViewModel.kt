@@ -5,7 +5,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
 import com.example.practica.model.Board
 import com.example.practica.model.Player
@@ -51,8 +50,10 @@ class GameViewModel : ViewModel() {
     var finalResultText by mutableStateOf("")
         private set
 
+    var difficulty by mutableStateOf("Fàcil")
+        private set
 
-    fun startGame(columns: Int, time: Boolean) {
+    fun startGame(columns: Int, time: Boolean, diff: String) {
         board = Board(columns)
         currentTurn = Player.HUMAN
         status = GameStatus.PLAYING
@@ -61,6 +62,7 @@ class GameViewModel : ViewModel() {
         isBoardCreated = true
         isTimeEnabled = time
         finalResultText = ""
+        difficulty = diff
         if (isTimeEnabled) {
             manageTime(45)
         }
@@ -132,11 +134,115 @@ class GameViewModel : ViewModel() {
                 validColumns.add(c)
             }
         }
+        if (validColumns.isEmpty()) return
 
-        if (validColumns.isNotEmpty()) {
-            val randomColumn = validColumns.random()
-            drop(randomColumn)
+        val chosenColumn = when (difficulty) {
+            "Fàcil" -> validColumns.random()
+            "Mitjana" -> playMedium(validColumns)
+            "Difícil" -> playHard(validColumns)
+            else -> validColumns.random()
         }
+        drop(chosenColumn)
+    }
+
+    private fun playMedium(validColumns: List<Int>): Int {
+        val winningMove = findWinningMove(Player.SYSTEM, validColumns)
+        if (winningMove != -1) {
+            return winningMove
+        }
+
+        val blockingMove = findWinningMove(Player.HUMAN, validColumns)
+        if (blockingMove != -1) {
+            return blockingMove
+        }
+        return validColumns.random()
+    }
+
+    private fun playHard(validColumns: List<Int>): Int {
+        val winningMove = findWinningMove(Player.SYSTEM, validColumns)
+        if (winningMove != -1) {
+            return winningMove
+        }
+
+        val blockingMove = findWinningMove(Player.HUMAN, validColumns)
+        if (blockingMove != -1) {
+            return blockingMove
+        }
+
+        val safeColumns = validColumns.filter { col ->
+            !givesOpponentWin(col, Player.HUMAN)
+        }
+
+        val columnsToConsider = if (safeColumns.isNotEmpty()) {
+            safeColumns
+        } else {
+            validColumns
+        }
+
+        val threatMoves = columnsToConsider.filter { col ->
+            createsThreat(col, Player.SYSTEM)
+        }
+        if (threatMoves.isNotEmpty()) {
+            return threatMoves.random()
+        }
+
+        val centerCol = board.columns / 2
+        return columnsToConsider.sortedBy { kotlin.math.abs(it - centerCol) }.first()
+    }
+
+    private fun findWinningMove(playerToCheck: Player, validColumns: List<Int>): Int {
+        for (col in validColumns) {
+            val row = board.firstEmptyRow(col)
+            if (row != -1) {
+                board.grid[row][col] = playerToCheck
+                val pos = com.example.practica.model.Position(row, col)
+                val connects = board.maxConnected(pos)
+                board.grid[row][col] = Player.NONE
+
+                if (connects >= 4) {
+                    return col
+                }
+            }
+        }
+        return -1
+    }
+
+    private fun givesOpponentWin(col: Int, opponent: Player): Boolean {
+        var isSuicide = false
+        val row = board.firstEmptyRow(col)
+        if (row != -1) {
+            board.grid[row][col] = Player.SYSTEM
+            val nextRow = row - 1
+            if (nextRow >= 0) {
+                board.grid[nextRow][col] = opponent
+                val pos = com.example.practica.model.Position(nextRow, col)
+                if (board.maxConnected(pos) >= 4) {
+                    isSuicide = true
+                }
+                board.grid[nextRow][col] = Player.NONE
+            }
+            board.grid[row][col] = Player.NONE
+        }
+        return isSuicide
+    }
+
+    private fun createsThreat(col: Int, me: Player): Boolean {
+        var createsWin = false
+        val row = board.firstEmptyRow(col)
+        if (row != -1) {
+            board.grid[row][col] = me
+
+            val tempValid = mutableListOf<Int>()
+            for (c in 0 until board.columns) {
+                if (board.firstEmptyRow(c) != -1) tempValid.add(c)
+            }
+            if (findWinningMove(me, tempValid) != -1) {
+                createsWin = true
+            }
+
+            board.grid[row][col] = Player.NONE
+        }
+        return createsWin
     }
 
     val statusText: String
@@ -152,12 +258,5 @@ class GameViewModel : ViewModel() {
             "${timeLeft} segons."
         } else {
             "No hi ha temps limit"
-        }
-
-    val timeColor: Color
-        get() = if (isTimeEnabled) {
-            Color.Red
-        } else {
-            Color.Blue
         }
 }

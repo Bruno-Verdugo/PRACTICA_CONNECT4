@@ -15,7 +15,7 @@ class ResultsViewModel : ViewModel() {
 
     private var initialized = false
 
-    fun initData(alias: String, columns: Int, timeLeft: Int, result: String) {
+    fun initData(alias: String, columns: Int, timeLeft: Int, result: String, difficulty: String) {
         if (initialized) return
 
         val dateFormat = SimpleDateFormat("MMM dd, yyyy h:mm:ss a", Locale.getDefault())
@@ -24,7 +24,7 @@ class ResultsViewModel : ViewModel() {
         val timeControlled = timeLeft > 0 || result == "TEMPS ESGOTAT"
         val timeSpent = if (timeControlled) 45 - timeLeft else 0
 
-        val commonLog = "Alias: $alias\nMida graella: $columns, Temps Total: $timeSpent segons.\n"
+        val commonLog = "Alias: $alias\nMida graella: $columns, Dificultat: $difficulty, Temps Total: $timeSpent segons.\n"
         val specificLog = when (result) {
             "HAS GUANYAT" -> {
                 var log = "Has guanyat!"

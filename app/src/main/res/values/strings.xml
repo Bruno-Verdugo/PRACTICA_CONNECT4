@@ -29,10 +29,14 @@
     <string name="ButtonDayAndHour">Dia i Hora</string>
     <string name="ButtonLogs">Valors del Log</string>
     <string name="ButtonDestinationMail">E-mail destinatari</string>
-    <string name="Instructions">"Benvingut al joc del CONNECT 4!\n\n""El joc consisteix en anar introduint fitxes en un tauler vertical amb l'objectiu d'alinear 4 consecutives del color assignat al jugador abans que el teu oponent.\n\n""A cada torn, el jugador introdueix una fitxa a la columna triada (sempre i quan no estigui completa) i aquesta cau a la posició més baixa possible.\n\n""Guanya la partida el jugador que primer aconsegueixi alinear 4 fitxes consecutives del seu color en horitzontal, vertical o diagonal.\n\n""Si totes les columnes estan plenes i ningú ha aconseguit alinear 4 fitxes, hi ha empat."</string>
+    <string name="Instructions">"Benvingut al joc del CONNECTA 4!\n\n""El joc consisteix en anar introduint fitxes en un tauler vertical amb l'objectiu d'alinear 4 peçes consecutives del color assignat al jugador abans que el teu oponent ho fagui.\n\n""A cada torn, el jugador introdueix una fitxa a la columna triada (sempre i quan no estigui completa) i aquesta cau a la posició més baixa possible.\n\n""Guanya la partida el jugador que primer aconsegueixi alinear 4 fitxes consecutives del seu color en horitzontal, vertical o diagonal.\n\n""Si totes les columnes estan plenes i ningú ha aconseguit alinear 4 fitxes, hi ha empat i ningu guanya."</string>
     <string name="ButtonALIAS">ALIAS</string>
     <string name="playerLabel">Jugador: %1$s</string>
     <string name="columnFull">Columna plena! Escull una altra.</string>
     <string name="resultsEmail">Enviar correu</string>
     <string name="emailSubject">Log - %1$s</string>
+    <string name="ButtonDifficulty">Dificultat</string>
+    <string name="ButtonEasy">Fàcil</string>
+    <string name="ButtonMedium">Mitja</string>
+    <string name="ButtonHard">Difícil</string>
 </resources>
