@@ -3,6 +3,7 @@ package com.example.practica.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
@@ -17,7 +18,14 @@ enum class GameStatus {
 }
 
 class GameViewModel : ViewModel() {
-
+    data class LogEntry(
+        val turnNumber: Int,
+        val row: Int,
+        val col: Int,
+        val startTime: String,
+        val endTime: String,
+        val timeLeft: Int? = null
+    )
     lateinit var board: Board
         private set
 
@@ -53,7 +61,13 @@ class GameViewModel : ViewModel() {
     var difficulty by mutableStateOf("Fàcil")
         private set
 
-    fun startGame(columns: Int, time: Boolean, diff: String) {
+    var initialLogInfo by mutableStateOf("")
+    val logEntries = mutableStateListOf<LogEntry>()
+
+    private var turnStartTime: String = ""
+    private var turnCounter = 1
+
+    fun startGame(alias: String, columns: Int, time: Boolean, diff: String) {
         board = Board(columns)
         currentTurn = Player.HUMAN
         status = GameStatus.PLAYING
@@ -66,6 +80,10 @@ class GameViewModel : ViewModel() {
         if (isTimeEnabled) {
             manageTime()
         }
+        turnStartTime = java.text.SimpleDateFormat("HH:mm:ss", java.util.Locale.getDefault()).format(java.util.Date())
+        initialLogInfo = "Alias: $alias | Tauler: $columns x $columns | Dificultat: $difficulty | ${if(time) "Control del temps" else "Sense control del temps"}"
+        logEntries.clear()
+        turnCounter = 1
     }
 
     fun drop(col: Int) {
@@ -75,6 +93,19 @@ class GameViewModel : ViewModel() {
 
         if (pos != null) {
             boardUpdateTrigger++
+
+            val currentTime = java.text.SimpleDateFormat("HH:mm:ss", java.util.Locale.getDefault()).format(java.util.Date())
+            logEntries.add(LogEntry(
+                    turnNumber = turnCounter++,
+                    row = pos.row,
+                    col = col,
+                    startTime = turnStartTime,
+                    endTime = currentTime,
+                    timeLeft = if (isTimeEnabled) timeLeft else null
+                )
+            )
+            turnStartTime = currentTime
+
             if (board.maxConnected(pos) >= 4) {
                 status = GameStatus.WON
                 winner = currentTurn
@@ -100,7 +131,7 @@ class GameViewModel : ViewModel() {
 
     private fun manageTime() {
         timerJob?.cancel()
-        timeLeft = 45
+        timeLeft = 120
 
         timerJob = viewModelScope.launch {
             while (timeLeft > 0 && status == GameStatus.PLAYING) {

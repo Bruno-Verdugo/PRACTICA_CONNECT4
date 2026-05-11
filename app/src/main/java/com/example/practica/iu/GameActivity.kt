@@ -2,6 +2,7 @@ package com.example.practica.iu
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -14,9 +15,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.layout.AnimatedPane
+import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
+import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -30,10 +37,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import android.content.res.Configuration
 import kotlinx.coroutines.delay
 import com.example.practica.R
 import com.example.practica.model.AppConstants
@@ -60,17 +67,15 @@ class GameActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun GameScreen(alias: String, columns: Int, time: Boolean, difficulty: String, gameViewModel: GameViewModel = viewModel()) {
     val context = LocalContext.current
     val activity = context as? Activity
 
-    val configuration = LocalConfiguration.current
-    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-
     LaunchedEffect(Unit) {
         if (!gameViewModel.isBoardCreated) {
-            gameViewModel.startGame(columns, time, difficulty)
+            gameViewModel.startGame(alias, columns, time, difficulty)
         }
     }
 
@@ -106,30 +111,107 @@ fun GameScreen(alias: String, columns: Int, time: Boolean, difficulty: String, g
             contentScale = ContentScale.Crop
         )
 
-        if (isLandscape) {
-            GameLandscapeLayout(
-                alias = alias,
-                columns = columns,
-                statusText = gameViewModel.statusText,
-                timeText = gameViewModel.timeText,
-                timeColor = timeColor,
-                isBoardCreated = gameViewModel.isBoardCreated,
-                isHumanTurn = isHumanTurn,
-                getCell = { row, col -> gameViewModel.board.grid[row][col] },
-                onDrop = onDrop
-            )
-        } else {
-            GamePortraitLayout(
-                alias = alias,
-                columns = columns,
-                statusText = gameViewModel.statusText,
-                timeText = gameViewModel.timeText,
-                timeColor = timeColor,
-                isBoardCreated = gameViewModel.isBoardCreated,
-                isHumanTurn = isHumanTurn,
-                getCell = { row, col -> gameViewModel.board.grid[row][col] },
-                onDrop = onDrop
-            )
+        val navigator = rememberListDetailPaneScaffoldNavigator<Nothing>()
+
+        ListDetailPaneScaffold(
+            directive = navigator.scaffoldDirective,
+            value = navigator.scaffoldValue,
+            // PANEL PRINCIPAL
+            listPane = {
+                val halfScreenWidth = (LocalConfiguration.current.screenWidthDp / 2).dp
+
+                AnimatedPane(modifier = Modifier.preferredWidth(halfScreenWidth)) {
+                    val configuration = LocalConfiguration.current
+                    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+                    if (isLandscape) {
+                        GameLandscapeLayout(
+                            alias = alias, columns = columns, statusText = gameViewModel.statusText,
+                            timeText = gameViewModel.timeText, timeColor = timeColor,
+                            isBoardCreated = gameViewModel.isBoardCreated, isHumanTurn = isHumanTurn,
+                            getCell = { row, col -> gameViewModel.board.grid[row][col] }, onDrop = onDrop
+                        )
+                    } else {
+                        GamePortraitLayout(
+                            alias = alias, columns = columns, statusText = gameViewModel.statusText,
+                            timeText = gameViewModel.timeText, timeColor = timeColor,
+                            isBoardCreated = gameViewModel.isBoardCreated, isHumanTurn = isHumanTurn,
+                            getCell = { row, col -> gameViewModel.board.grid[row][col] }, onDrop = onDrop
+                        )
+                    }
+                }
+            },
+            // PANEL SECUNDARIO
+            detailPane = {
+                AnimatedPane {
+                    GameLogPanel(
+                        initialInfo = gameViewModel.initialLogInfo,
+                        logEntries = gameViewModel.logEntries
+                    )
+                }
+            }
+        )
+    }
+}
+
+@Composable
+fun GameLogPanel(initialInfo: String, logEntries: List<GameViewModel.LogEntry>) {
+    Column(
+        modifier = Modifier.fillMaxSize().padding(16.dp).clip(RoundedCornerShape(16.dp)).background(CardBg).border(1.dp, Color.White.copy(alpha = 0.1f), RoundedCornerShape(16.dp)).padding(16.dp)
+    ) {
+        Text(
+            text = "LOG DE PARTIDA",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Black,
+            color = WhiteText,
+            letterSpacing = 1.sp
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = initialInfo,
+            color = NeonYellow,
+            fontSize = 13.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        HorizontalDivider(modifier = Modifier.padding(vertical = 10.dp), color = Color.Gray.copy(alpha = 0.3f))
+
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(logEntries) { entry ->
+                Column(
+                    modifier = Modifier.fillMaxWidth().background(Color.Black.copy(alpha = 0.3f), RoundedCornerShape(8.dp)).padding(10.dp)
+                ) {
+                    Text(
+                        text = "Tirada ${entry.turnNumber}: Casella seleccionada = (${entry.row}, ${entry.col})",
+                        color = WhiteText,
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Spacer(modifier = Modifier.height(2.dp))
+
+                    Text(
+                        text = "Inici: ${entry.startTime} | Final: ${entry.endTime}",
+                        color = Color.LightGray,
+                        fontSize = 11.sp
+                    )
+
+                    entry.timeLeft?.let {
+                        Spacer(modifier = Modifier.height(2.dp))
+                        Text(
+                            text = "Temps restant = $it secs.",
+                            color = NeonRed,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -187,7 +269,7 @@ fun BoardGame(
     getCell: (row: Int, col: Int) -> Player,
     onDrop: (Int) -> Unit
 ) {
-    Box(modifier = Modifier.fillMaxSize().padding(8.dp).clip(RoundedCornerShape(16.dp)).background(CardBg).border(2.dp, color = Black.copy(alpha = 0.6f), RoundedCornerShape(16.dp)).padding(8.dp)) {
+    Box(modifier = Modifier.fillMaxSize().padding(8.dp).clip(RoundedCornerShape(16.dp)).background(CardBg).border(2.dp, color = Color.Black.copy(alpha = 0.6f), RoundedCornerShape(16.dp)).padding(8.dp)) {
 
         Row(modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
@@ -276,5 +358,60 @@ fun GameLandscapeLayout(
                 }
             }
         }
+    }
+}
+
+// 1. Vista de Smartphone (Compact) -> Debe verse mono-panel (solo tablero)
+@Preview(
+    name = "1. Smartphone (Mono-panel)",
+    showSystemUi = true,
+    device = "id:pixel_5"
+)
+@Composable
+fun PreviewSmartphone() {
+    PRACTICATheme(darkTheme = true) {
+        GameScreen(
+            alias = "Montse",
+            columns = 7,
+            time = true,
+            difficulty = "Fàcil"
+        )
+    }
+}
+
+// 2. Vista de Tablet Horizontal -> Debe verse bi-panel (Tablero izq + Log der)
+@Preview(
+    name = "2. Tablet Horizontal (Bi-panel)",
+    showSystemUi = true,
+    // Forzamos las dimensiones de la tablet de 10.1" que pide la profesora
+    device = "spec:width=1280dp,height=800dp,dpi=240"
+)
+@Composable
+fun PreviewTabletLandscape() {
+    PRACTICATheme(darkTheme = true) {
+        GameScreen(
+            alias = "Montse",
+            columns = 7,
+            time = true,
+            difficulty = "Fàcil"
+        )
+    }
+}
+
+// 3. Vista de Tablet Vertical -> Para validar cómo se recoloca el andamio al girar
+@Preview(
+    name = "3. Tablet Vertical",
+    showSystemUi = true,
+    device = "spec:width=840dp,height=1280dp,dpi=240"
+)
+@Composable
+fun PreviewTabletPortrait() {
+    PRACTICATheme(darkTheme = true) {
+        GameScreen(
+            alias = "Montse",
+            columns = 7,
+            time = true,
+            difficulty = "Fàcil"
+        )
     }
 }
