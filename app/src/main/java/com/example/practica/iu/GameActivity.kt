@@ -37,7 +37,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -358,60 +357,5 @@ fun GameLandscapeLayout(
                 }
             }
         }
-    }
-}
-
-// 1. Vista de Smartphone (Compact) -> Debe verse mono-panel (solo tablero)
-@Preview(
-    name = "1. Smartphone (Mono-panel)",
-    showSystemUi = true,
-    device = "id:pixel_5"
-)
-@Composable
-fun PreviewSmartphone() {
-    PRACTICATheme(darkTheme = true) {
-        GameScreen(
-            alias = "Montse",
-            columns = 7,
-            time = true,
-            difficulty = "Fàcil"
-        )
-    }
-}
-
-// 2. Vista de Tablet Horizontal -> Debe verse bi-panel (Tablero izq + Log der)
-@Preview(
-    name = "2. Tablet Horizontal (Bi-panel)",
-    showSystemUi = true,
-    // Forzamos las dimensiones de la tablet de 10.1" que pide la profesora
-    device = "spec:width=1280dp,height=800dp,dpi=240"
-)
-@Composable
-fun PreviewTabletLandscape() {
-    PRACTICATheme(darkTheme = true) {
-        GameScreen(
-            alias = "Montse",
-            columns = 7,
-            time = true,
-            difficulty = "Fàcil"
-        )
-    }
-}
-
-// 3. Vista de Tablet Vertical -> Para validar cómo se recoloca el andamio al girar
-@Preview(
-    name = "3. Tablet Vertical",
-    showSystemUi = true,
-    device = "spec:width=840dp,height=1280dp,dpi=240"
-)
-@Composable
-fun PreviewTabletPortrait() {
-    PRACTICATheme(darkTheme = true) {
-        GameScreen(
-            alias = "Montse",
-            columns = 7,
-            time = true,
-            difficulty = "Fàcil"
-        )
     }
 }

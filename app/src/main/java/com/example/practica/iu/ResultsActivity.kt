@@ -91,6 +91,11 @@ fun ResultsScreen(
         activity?.finish()
     }
 
+    val onConfigClick: () -> Unit = {
+        val intent = Intent(context, ConfigurationActivity::class.java)
+        context.startActivity(intent)
+    }
+
     val onExitClick: () -> Unit = { activity?.finishAffinity() }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -102,17 +107,17 @@ fun ResultsScreen(
         )
 
         if (isLandscape) {
-            ResultsLandscapeLayout(resultsViewModel, focusRequester, onSendMailClick, onPlayAgainClick, onExitClick)
+            ResultsLandscapeLayout(resultsViewModel, focusRequester, onSendMailClick, onPlayAgainClick, onExitClick, onConfigClick)
         } else {
-            ResultsPortraitLayout(resultsViewModel, focusRequester, onSendMailClick, onPlayAgainClick, onExitClick)
+            ResultsPortraitLayout(resultsViewModel, focusRequester, onSendMailClick, onPlayAgainClick, onExitClick, onConfigClick)
         }
     }
 }
 
 @Composable
-fun ResultsHeader(isLandscape: Boolean) {
+fun ResultsHeader(isLandscape: Boolean, onConfigClick: () -> Unit) {
     val height = if (isLandscape) 60.dp else 100.dp
-    val fontSize = if (isLandscape) 20.sp else 27.sp
+    val fontSize = if (isLandscape) 20.sp else 20.sp
 
     Box(modifier = Modifier.fillMaxWidth().height(height).background(CardBg).padding(horizontal = 16.dp)) {
         Text(
@@ -124,6 +129,17 @@ fun ResultsHeader(isLandscape: Boolean) {
             letterSpacing = 2.sp,
             style = MaterialTheme.typography.displayLarge
         )
+
+        IconButton(
+            onClick = onConfigClick,
+            modifier = Modifier.align(Alignment.CenterEnd).padding(5.dp)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.configure),
+                contentDescription = "Configuració",
+                modifier = Modifier.size(if (isLandscape) 25.dp else 33.dp)
+            )
+        }
     }
 }
 
@@ -175,13 +191,16 @@ fun ResultsButton(
 @Composable
 fun ResultsPortraitLayout(
     viewModel: ResultsViewModel, fr: FocusRequester,
-    onMail: () -> Unit, onPlay: () -> Unit, onExit: () -> Unit
+    onMail: () -> Unit,
+    onPlay: () -> Unit,
+    onExit: () -> Unit,
+    onConfigClick: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ResultsHeader(isLandscape = false)
+        ResultsHeader(isLandscape = false, onConfigClick = onConfigClick)
 
         Column(
             modifier = Modifier.fillMaxWidth().weight(1f),
@@ -251,13 +270,16 @@ fun ResultsPortraitLayout(
 @Composable
 fun ResultsLandscapeLayout(
     viewModel: ResultsViewModel, fr: FocusRequester,
-    onMail: () -> Unit, onPlay: () -> Unit, onExit: () -> Unit
+    onMail: () -> Unit,
+    onPlay: () -> Unit,
+    onExit: () -> Unit,
+    onConfigClick: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ResultsHeader(isLandscape = true)
+        ResultsHeader(isLandscape = true, onConfigClick = onConfigClick)
 
         Row(
             modifier = Modifier.fillMaxWidth().weight(1f).padding(horizontal = 16.dp).verticalScroll(rememberScrollState()),

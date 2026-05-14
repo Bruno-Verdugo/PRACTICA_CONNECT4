@@ -10,6 +10,7 @@
     <string name="title_activity_configuration_view_model">ConfigurationViewModel</string>
     <string name="title_activity_results_view_model">ResultsViewModel</string>
     <string name="title_activity_app_constants">AppConstants</string>
+    <string name="title_activity_data_store_manager.kt">DataStoreManager.kt</string>
     <string name="main_title">PRINCIPAL</string>
     <string name="main_gametitle">CONNECT4</string>
     <string name="ButtonHelp">AJUDA</string>
@@ -19,6 +20,7 @@
     <string name="help_title">AJUDA</string>
     <string name="config_title">CONFIGURACIÓ</string>
     <string name="game_title">CONNECT4</string>
+    <string name="ButtonReturn">TORNAR</string>
     <string name="ButtonAlias">Alias identificatiu</string>
     <string name="ButtonBoard">Mida graella</string>
     <string name="ButtonTime">Control del temps</string>

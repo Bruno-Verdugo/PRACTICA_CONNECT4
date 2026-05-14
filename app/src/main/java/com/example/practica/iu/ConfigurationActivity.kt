@@ -1,7 +1,6 @@
 package com.example.practica.iu
 
 import android.app.Activity
-import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -30,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.practica.R
-import com.example.practica.model.AppConstants
 import com.example.practica.ui.theme.*
 import com.example.practica.viewmodel.ConfigurationViewModel
 
@@ -55,13 +53,7 @@ fun ConfigurationScreen(configViewModel: ConfigurationViewModel = viewModel()) {
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-    val onStartGame: () -> Unit = {
-        val intent = Intent(context, GameActivity::class.java)
-        intent.putExtra(AppConstants.ALIAS, configViewModel.alias)
-        intent.putExtra(AppConstants.COLUMNS, configViewModel.columns)
-        intent.putExtra(AppConstants.TIME, configViewModel.time)
-        intent.putExtra(AppConstants.DIFFICULTY, configViewModel.difficulty)
-        context.startActivity(intent)
+    val onBackClick: () -> Unit = {
         activity?.finish()
     }
 
@@ -79,7 +71,7 @@ fun ConfigurationScreen(configViewModel: ConfigurationViewModel = viewModel()) {
                 columns = configViewModel.columns, onColumnsChange = { configViewModel.onColumnsChange(it) },
                 time = configViewModel.time, onTimeChange = { configViewModel.onTimeChange(it) },
                 difficulty = configViewModel.difficulty, onDifficultyChange = { configViewModel.onDifficultyChange(it) },
-                onStartGame = onStartGame
+                onStartGame = onBackClick
             )
         } else {
             ConfigPortraitLayout(
@@ -87,7 +79,7 @@ fun ConfigurationScreen(configViewModel: ConfigurationViewModel = viewModel()) {
                 columns = configViewModel.columns, onColumnsChange = { configViewModel.onColumnsChange(it) },
                 time = configViewModel.time, onTimeChange = { configViewModel.onTimeChange(it) },
                 difficulty = configViewModel.difficulty, onDifficultyChange = { configViewModel.onDifficultyChange(it) },
-                onStartGame = onStartGame
+                onStartGame = onBackClick
             )
         }
     }
@@ -141,7 +133,7 @@ fun ConfigurationButton(onClick: () -> Unit) {
         contentPadding = PaddingValues()
     ) {
         Text(
-            text = stringResource(R.string.ButtonStarted),
+            text = stringResource(R.string.ButtonReturn),
             color = WhiteText,
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
@@ -167,7 +159,7 @@ fun ConfigFormContent(
             contentDescription = "Persona",
             modifier = Modifier.size(30.dp)
         )
-        
+
         OutlinedTextField(
             value = alias,
             onValueChange = onAliasChange,

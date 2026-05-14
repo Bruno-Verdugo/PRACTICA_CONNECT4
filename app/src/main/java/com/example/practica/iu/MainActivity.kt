@@ -28,8 +28,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.graphics.SolidColor
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.practica.R
+import com.example.practica.model.AppConstants
 import com.example.practica.ui.theme.*
+import com.example.practica.viewmodel.ConfigurationViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,7 +48,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun PrincipalScreen() {
+fun PrincipalScreen(configViewModel: ConfigurationViewModel = viewModel()) {
     val context = LocalContext.current
     val activity = context as? Activity
 
@@ -53,9 +56,18 @@ fun PrincipalScreen() {
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     val onStartClick: () -> Unit = {
-        val intent = Intent(context, ConfigurationActivity::class.java)
+        val intent = Intent(context, GameActivity::class.java)
+        intent.putExtra(AppConstants.ALIAS, configViewModel.alias)
+        intent.putExtra(AppConstants.COLUMNS, configViewModel.columns)
+        intent.putExtra(AppConstants.TIME, configViewModel.time)
+        intent.putExtra(AppConstants.DIFFICULTY, configViewModel.difficulty)
         context.startActivity(intent)
         activity?.finish()
+    }
+
+    val onConfigClick: () -> Unit = {
+        val intent = Intent(context, ConfigurationActivity::class.java)
+        context.startActivity(intent)
     }
 
     val onHelpClick: () -> Unit = {
@@ -75,15 +87,15 @@ fun PrincipalScreen() {
         )
 
         if (isLandscape) {
-            MainLandscapeLayout(onStartClick, onHelpClick, onExitClick)
+            MainLandscapeLayout(onStartClick, onHelpClick, onExitClick, onConfigClick)
         } else {
-            MainPortraitLayout(onStartClick, onHelpClick, onExitClick)
+            MainPortraitLayout(onStartClick, onHelpClick, onExitClick, onConfigClick)
         }
     }
 }
 
 @Composable
-fun MainHeader(isLandscape: Boolean) {
+fun MainHeader(isLandscape: Boolean, onConfigClick: () -> Unit) {
     val header = if (isLandscape) 50.dp else 100.dp
     val titleSize = if (isLandscape) 20.sp else 27.sp
 
@@ -115,6 +127,17 @@ fun MainHeader(isLandscape: Boolean) {
             letterSpacing = 2.sp,
             style = MaterialTheme.typography.displayLarge
         )
+
+        IconButton(
+            onClick = onConfigClick,
+            modifier = Modifier.align(Alignment.CenterEnd)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.configure),
+                contentDescription = "Configuració",
+                modifier = Modifier.size(if (isLandscape) 25.dp else 33.dp)
+            )
+        }
     }
 }
 
@@ -151,13 +174,12 @@ fun MainButton(
     }
 }
 
-
 @Composable
-fun MainPortraitLayout(onStart: () -> Unit, onHelp: () -> Unit, onExit: () -> Unit) {
+fun MainPortraitLayout(onStart: () -> Unit, onHelp: () -> Unit, onExit: () -> Unit, onConfig: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        MainHeader(isLandscape = false)
+        MainHeader(isLandscape = false, onConfigClick = onConfig)
 
         Column(modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -180,7 +202,7 @@ fun MainPortraitLayout(onStart: () -> Unit, onHelp: () -> Unit, onExit: () -> Un
             )
 
             Spacer(modifier = Modifier.height(20.dp))
-            
+
             MainButton(
                 modifier = Modifier.width(240.dp).height(55.dp),
                 text = stringResource(R.string.ButtonExit),
@@ -190,7 +212,7 @@ fun MainPortraitLayout(onStart: () -> Unit, onHelp: () -> Unit, onExit: () -> Un
             )
 
             Spacer(modifier = Modifier.height(100.dp))
-            
+
             Image(
                 modifier = Modifier.fillMaxWidth(0.6f).height(125.dp),
                 painter = painterResource(id = R.drawable.icon_connect),
@@ -202,11 +224,11 @@ fun MainPortraitLayout(onStart: () -> Unit, onHelp: () -> Unit, onExit: () -> Un
 }
 
 @Composable
-fun MainLandscapeLayout(onStart: () -> Unit, onHelp: () -> Unit, onExit: () -> Unit) {
+fun MainLandscapeLayout(onStart: () -> Unit, onHelp: () -> Unit, onExit: () -> Unit, onConfig: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        MainHeader(isLandscape = true)
+        MainHeader(isLandscape = true, onConfigClick = onConfig)
 
         Row(
             modifier = Modifier.fillMaxWidth().weight(1f).padding(horizontal = 16.dp),
