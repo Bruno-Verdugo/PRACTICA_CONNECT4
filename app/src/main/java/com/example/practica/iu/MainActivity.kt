@@ -78,6 +78,11 @@ fun PrincipalScreen(configViewModel: ConfigurationViewModel = viewModel()) {
 
     val onExitClick: () -> Unit = { activity?.finish() }
 
+    val onHistoryClick: () -> Unit = {
+        val intent = Intent(context, HistoryActivity::class.java)
+        context.startActivity(intent)
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
             painter = painterResource(id = R.drawable.main),
@@ -87,9 +92,9 @@ fun PrincipalScreen(configViewModel: ConfigurationViewModel = viewModel()) {
         )
 
         if (isLandscape) {
-            MainLandscapeLayout(onStartClick, onHelpClick, onExitClick, onConfigClick)
+            MainLandscapeLayout(onStartClick, onHelpClick, onExitClick, onConfigClick, onHistoryClick)
         } else {
-            MainPortraitLayout(onStartClick, onHelpClick, onExitClick, onConfigClick)
+            MainPortraitLayout(onStartClick, onHelpClick, onExitClick, onConfigClick, onHistoryClick)
         }
     }
 }
@@ -175,7 +180,7 @@ fun MainButton(
 }
 
 @Composable
-fun MainPortraitLayout(onStart: () -> Unit, onHelp: () -> Unit, onExit: () -> Unit, onConfig: () -> Unit) {
+fun MainPortraitLayout(onStart: () -> Unit, onHelp: () -> Unit, onExit: () -> Unit, onConfig: () -> Unit, onHistoryClick: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
@@ -205,6 +210,15 @@ fun MainPortraitLayout(onStart: () -> Unit, onHelp: () -> Unit, onExit: () -> Un
 
             MainButton(
                 modifier = Modifier.width(240.dp).height(55.dp),
+                text = stringResource(R.string.ButtonConsult),
+                backgroundBrush = Brush.horizontalGradient(listOf(ButtonGray, ButtonGrayDark)),
+                onClick = onHistoryClick
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            MainButton(
+                modifier = Modifier.width(240.dp).height(55.dp),
                 text = stringResource(R.string.ButtonExit),
                 icon = painterResource(id = R.drawable.exit),
                 backgroundBrush = SolidColor(NeonRed),
@@ -224,7 +238,7 @@ fun MainPortraitLayout(onStart: () -> Unit, onHelp: () -> Unit, onExit: () -> Un
 }
 
 @Composable
-fun MainLandscapeLayout(onStart: () -> Unit, onHelp: () -> Unit, onExit: () -> Unit, onConfig: () -> Unit) {
+fun MainLandscapeLayout(onStart: () -> Unit, onHelp: () -> Unit, onExit: () -> Unit, onConfig: () -> Unit, onHistoryClick: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
@@ -258,6 +272,15 @@ fun MainLandscapeLayout(onStart: () -> Unit, onHelp: () -> Unit, onExit: () -> U
                     null,
                     Brush.horizontalGradient(listOf(ElectricBlue, NeonCyan)),
                     onStart
+                )
+
+                Spacer(modifier = Modifier.height(15.dp))
+
+                MainButton(
+                    modifier = Modifier.width(240.dp).height(55.dp),
+                    text = stringResource(R.string.ButtonConsult),
+                    backgroundBrush = Brush.horizontalGradient(listOf(ButtonGray, ButtonGrayDark)),
+                    onClick = onHistoryClick
                 )
 
                 Spacer(modifier = Modifier.height(15.dp))

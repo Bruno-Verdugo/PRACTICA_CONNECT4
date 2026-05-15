@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+        android:name=".iu.GameApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -12,32 +13,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PRACTICA">
         <activity
-            android:name=".viewmodel.DataStoreManager.kt"
+            android:name=".iu.HistoryActivity"
             android:exported="false"
-            android:label="@string/title_activity_data_store_manager.kt"
+            android:label="@string/title_activity_history"
             android:theme="@style/Theme.PRACTICA" />
         <activity
-            android:name=".viewmodel.ResultsViewModel"
+            android:name=".iu.GameApplication"
             android:exported="false"
-            android:label="@string/title_activity_results_view_model"
-            android:theme="@style/Theme.PRACTICA"
-            tools:ignore="Instantiatable" />
-        <activity
-            android:name=".viewmodel.GameViewModel"
-            android:exported="false"
-            android:label="@string/title_activity_game_view_model"
-            android:theme="@style/Theme.PRACTICA"
-            tools:ignore="Instantiatable" />
-        <activity
-            android:name=".viewmodel.ConfigurationViewModel"
-            android:exported="false"
-            android:label="@string/title_activity_configuration_view_model"
-            android:theme="@style/Theme.PRACTICA"
-            tools:ignore="Instantiatable" />
-        <activity
-            android:name=".model.AppConstants"
-            android:exported="false"
-            android:label="@string/title_activity_app_constants"
+            android:label="@string/title_activity_game_application"
             android:theme="@style/Theme.PRACTICA"
             tools:ignore="Instantiatable" />
         <activity

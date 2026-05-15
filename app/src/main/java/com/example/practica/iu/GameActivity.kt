@@ -47,6 +47,8 @@ import com.example.practica.model.Player
 import com.example.practica.ui.theme.*
 import com.example.practica.viewmodel.GameStatus
 import com.example.practica.viewmodel.GameViewModel
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.layout.calculatePaneScaffoldDirective
 
 class GameActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -110,17 +112,33 @@ fun GameScreen(alias: String, columns: Int, time: Boolean, difficulty: String, g
             contentScale = ContentScale.Crop
         )
 
-        val navigator = rememberListDetailPaneScaffoldNavigator<Nothing>()
+        val configuration = LocalConfiguration.current
+        val adaptiveInfo = currentWindowAdaptiveInfo()
+        val customDirective = calculatePaneScaffoldDirective(adaptiveInfo).let { directive ->
+            if (configuration.smallestScreenWidthDp < 600) {
+                directive.copy(maxHorizontalPartitions = 1)
+            } else {
+                directive
+            }
+        }
+
+        val navigator = rememberListDetailPaneScaffoldNavigator<Nothing>(
+            scaffoldDirective = customDirective
+        )
 
         ListDetailPaneScaffold(
             directive = navigator.scaffoldDirective,
             value = navigator.scaffoldValue,
             // PANEL PRINCIPAL
             listPane = {
-                val halfScreenWidth = (LocalConfiguration.current.screenWidthDp / 2).dp
+                val paneModifier = if (configuration.smallestScreenWidthDp < 600) {
+                    Modifier.fillMaxWidth()
+                } else {
+                    val halfScreenWidth = (configuration.screenWidthDp / 2).dp
+                    Modifier.preferredWidth(halfScreenWidth)
+                }
 
-                AnimatedPane(modifier = Modifier.preferredWidth(halfScreenWidth)) {
-                    val configuration = LocalConfiguration.current
+                AnimatedPane(modifier = paneModifier) {
                     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
                     if (isLandscape) {

@@ -38,6 +38,8 @@ import com.example.practica.model.AppConstants
 import com.example.practica.ui.theme.*
 import androidx.compose.ui.graphics.SolidColor
 import com.example.practica.viewmodel.ResultsViewModel
+import com.example.practica.viewmodel.AppViewModelProvider
+import com.example.practica.viewmodel.ConfigurationViewModel
 
 class ResultsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,7 +63,8 @@ class ResultsActivity : ComponentActivity() {
 @Composable
 fun ResultsScreen(
     alias: String, columns: Int, timeLeft: Int, result: String, difficulty: String,
-    resultsViewModel: ResultsViewModel = viewModel()
+    resultsViewModel: ResultsViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    configViewModel: ConfigurationViewModel = viewModel()
 ) {
     val context = LocalContext.current
     val activity = context as? Activity
@@ -84,9 +87,12 @@ fun ResultsScreen(
     }
 
     val onPlayAgainClick: () -> Unit = {
-        val intent = Intent(context, ConfigurationActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        }
+
+        val intent = Intent(context, GameActivity::class.java)
+        intent.putExtra(AppConstants.ALIAS, configViewModel.alias)
+        intent.putExtra(AppConstants.COLUMNS, configViewModel.columns)
+        intent.putExtra(AppConstants.TIME, configViewModel.time)
+        intent.putExtra(AppConstants.DIFFICULTY, configViewModel.difficulty)
         context.startActivity(intent)
         activity?.finish()
     }

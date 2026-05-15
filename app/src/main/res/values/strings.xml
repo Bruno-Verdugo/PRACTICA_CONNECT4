@@ -41,4 +41,19 @@
     <string name="ButtonEasy">Fàcil</string>
     <string name="ButtonMedium">Mitja</string>
     <string name="ButtonHard">Difícil</string>
+    <string name="title_activity_game_record">GameRecord</string>
+    <string name="title_activity_game_dao">GameDao</string>
+    <string name="title_activity_game_database">GameDatabase</string>
+    <string name="title_activity_game_repository">GameRepository</string>
+    <string name="title_activity_app_container">AppContainer</string>
+    <string name="title_activity_game_application">GameApplication</string>
+    <string name="title_activity_app_view_model">AppViewModel</string>
+    <string name="title_activity_game_history_view_model">GameHistoryViewModel</string>
+    <string name="title_activity_history">HistoryActivity</string>
+    <string name="ButtonConsult">CONSULTAR PARTIDES</string>
+    <string name="ButtonBBDD">CONSULTES BBDD</string>
+    <string name="ButtonGoBack">Tornar</string>
+    <string name="ButtonNoGame">No hi ha partides registrades</string>
+    <string name="ButtonSelectGame">Selecciona una partida per veure els detalls...</string>
+    <string name="ButtonDetails">Detalls de la partida</string>
 </resources>
