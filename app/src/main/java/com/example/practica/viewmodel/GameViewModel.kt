@@ -167,7 +167,7 @@ class GameViewModel : ViewModel() {
 
         val chosenColumn = when (difficulty) {
             "Fàcil" -> validColumns.random() // Lógica de dificultad fàcil
-            "Mitjana" -> playMedium(validColumns)
+            "Mitja" -> playMedium(validColumns)
             "Difícil" -> playHard(validColumns)
             else -> validColumns.random()
         }

@@ -54,6 +54,18 @@
     <string name="ButtonBBDD">CONSULTES BBDD</string>
     <string name="ButtonGoBack">Tornar</string>
     <string name="ButtonNoGame">No hi ha partides registrades</string>
-    <string name="ButtonSelectGame">Selecciona una partida per veure els detalls...</string>
+    <string name="ButtonSelectGame">Selecciona una partida per veure els detalls</string>
     <string name="ButtonDetails">Detalls de la partida</string>
+    <string name="log_title">LOG DE PARTIDA</string>
+    <string name="log_turn">Tirada %1$d: Casella seleccionada = (%2$d, %3$d)</string>
+    <string name="log_time_info">Inici: %1$s | Final: %2$s</string>
+    <string name="log_time_left">Temps restant = %1$d secs.</string>
+    <string name="detail_alias">Alias: %1$s</string>
+    <string name="detail_date">Data: %1$s</string>
+    <string name="detail_grid">Mida graella: %1$d x %1$d</string>
+    <string name="detail_diff">Dificultat: %1$s</string>
+    <string name="detail_time">Temps restant (segons): %1$d</string>
+    <string name="detail_result">Resultat: %1$s</string>
+    <string name="filter_label">Filtrar per:</string>
+    <string name="filter_all">Totes</string>
 </resources>

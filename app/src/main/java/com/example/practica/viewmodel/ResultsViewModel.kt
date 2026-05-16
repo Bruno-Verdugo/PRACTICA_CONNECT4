@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 class ResultsViewModel(private val repository: GameRepository) : ViewModel() {
     var dateText by mutableStateOf("")
     var logText by mutableStateOf("")
-    var emailText by mutableStateOf("mvs33@alumnes.udl.cat")
+    var emailText by mutableStateOf("")
 
     private var initialized = false
 

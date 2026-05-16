@@ -177,7 +177,7 @@ fun GameLogPanel(initialInfo: String, logEntries: List<GameViewModel.LogEntry>) 
         modifier = Modifier.fillMaxSize().padding(16.dp).clip(RoundedCornerShape(16.dp)).background(CardBg).border(1.dp, Color.White.copy(alpha = 0.1f), RoundedCornerShape(16.dp)).padding(16.dp)
     ) {
         Text(
-            text = "LOG DE PARTIDA",
+            text = stringResource(R.string.log_title),
             fontSize = 18.sp,
             fontWeight = FontWeight.Black,
             color = WhiteText,
@@ -204,7 +204,7 @@ fun GameLogPanel(initialInfo: String, logEntries: List<GameViewModel.LogEntry>) 
                     modifier = Modifier.fillMaxWidth().background(Color.Black.copy(alpha = 0.3f), RoundedCornerShape(8.dp)).padding(10.dp)
                 ) {
                     Text(
-                        text = "Tirada ${entry.turnNumber}: Casella seleccionada = (${entry.row}, ${entry.col})",
+                        text = stringResource(R.string.log_turn, entry.turnNumber, entry.row, entry.col),
                         color = WhiteText,
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Bold
@@ -213,7 +213,7 @@ fun GameLogPanel(initialInfo: String, logEntries: List<GameViewModel.LogEntry>) 
                     Spacer(modifier = Modifier.height(2.dp))
 
                     Text(
-                        text = "Inici: ${entry.startTime} | Final: ${entry.endTime}",
+                        text = stringResource(R.string.log_time_info, entry.startTime, entry.endTime),
                         color = Color.LightGray,
                         fontSize = 11.sp
                     )
@@ -221,7 +221,7 @@ fun GameLogPanel(initialInfo: String, logEntries: List<GameViewModel.LogEntry>) 
                     entry.timeLeft?.let {
                         Spacer(modifier = Modifier.height(2.dp))
                         Text(
-                            text = "Temps restant = $it secs.",
+                            text = stringResource(R.string.log_time_left, it),
                             color = NeonRed,
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Bold

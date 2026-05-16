@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -41,6 +42,9 @@ import kotlinx.coroutines.launch
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.adaptive.layout.calculatePaneScaffoldDirective
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 
@@ -67,6 +71,7 @@ fun HistoryScreen(
     val configuration = LocalConfiguration.current
 
     val gameList by historyViewModel.uiState.collectAsStateWithLifecycle()
+    val currentFilter by historyViewModel.selectedFilter.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
     val adaptiveInfo = currentWindowAdaptiveInfo()
 
@@ -131,6 +136,8 @@ fun HistoryScreen(
                 listPane = {
                     AccessBD(
                         gameList = gameList,
+                        selectedFilter = currentFilter,
+                        onFilterChange = { nuevoFiltro -> historyViewModel.onFilterChange(nuevoFiltro) },
                         onItemClick = { record ->
                             scope.launch {
                                 navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, record)
@@ -148,40 +155,108 @@ fun HistoryScreen(
 }
 
 @Composable
-fun AccessBD(gameList: List<GameRecord>, onItemClick: (GameRecord) -> Unit) {
-    if (gameList.isEmpty()) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
+fun AccessBD(
+    gameList: List<GameRecord>,
+    selectedFilter: String,
+    onFilterChange: (String) -> Unit,
+    onItemClick: (GameRecord) -> Unit
+) {
+    var expanded by rememberSaveable { mutableStateOf(false) }
+
+    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = stringResource(R.string.ButtonNoGame),
-                color = WhiteText, fontSize = 18.sp
+                text = stringResource(R.string.filter_label),
+                color = Color.Gray,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Bold
             )
-        }
-    } else {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize().padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            items(gameList) { record ->
-                Column(
-                    modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(8.dp)).background(CardBg).clickable { onItemClick(record) }.padding(16.dp)
+
+            Box {
+                Button(
+                    onClick = { expanded = true },
+                    colors = ButtonDefaults.buttonColors(containerColor = CardBg),
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier.border(1.dp, Color.White.copy(alpha = 0.1f), RoundedCornerShape(8.dp))
                 ) {
                     Text(
-                        text = "${record.alias} -- ${record.date}",
-                        color = WhiteText,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp
-                    )
-
-                    Spacer(modifier = Modifier.height(4.dp))
-
-                    Text(
-                        text = record.result,
-                        color = if(record.result.contains("GUANYAT")) NeonCyan else NeonRed,
+                        text = if (selectedFilter == "Totes") stringResource(R.string.filter_all) else selectedFilter,
+                        color = NeonCyan,
                         fontWeight = FontWeight.Bold
                     )
+                }
+
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                    modifier = Modifier.background(CardBg).border(1.dp, Color.White.copy(alpha = 0.1f))
+                ) {
+                    val opciones = listOf("Totes", "HAS GUANYAT", "GUANYA LA MÀQUINA", "TEMPS ESGOTAT", "EMPAT")
+
+                    opciones.forEach { opcion ->
+                        DropdownMenuItem(
+                            text = {
+                                Text(
+                                    text = if (opcion == "Totes") stringResource(R.string.filter_all) else opcion,
+                                    color = WhiteText,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            },
+                            onClick = {
+                                onFilterChange(opcion)
+                                expanded = false
+                            }
+                        )
+                    }
+                }
+            }
+        }
+
+        if (gameList.isEmpty()) {
+            Box(
+                modifier = Modifier.weight(1f).fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = stringResource(R.string.ButtonNoGame),
+                    color = Color.Gray,
+                    fontSize = 16.sp
+                )
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier.weight(1f).fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                items(gameList) { record ->
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(CardBg)
+                            .clickable { onItemClick(record) }
+                            .padding(16.dp)
+                    ) {
+                        Text(
+                            text = "${record.alias} -- ${record.date}",
+                            color = WhiteText,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp
+                        )
+
+                        Spacer(modifier = Modifier.height(4.dp))
+
+                        Text(
+                            text = record.result,
+                            color = if(record.result.contains("GUANYAT")) NeonCyan else NeonRed,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             }
         }
@@ -215,7 +290,7 @@ fun DetailReg(record: GameRecord?) {
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
-                "Alias: ${record.alias}",
+                stringResource(R.string.detail_alias, record.alias),
                 color = WhiteText,
                 fontSize = 18.sp
             )
@@ -223,7 +298,7 @@ fun DetailReg(record: GameRecord?) {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                "Data: ${record.date}",
+                stringResource(R.string.detail_date, record.date),
                 color = WhiteText,
                 fontSize = 18.sp
             )
@@ -231,7 +306,7 @@ fun DetailReg(record: GameRecord?) {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                "Mida graella: ${record.columns} x ${record.columns}",
+                stringResource(R.string.detail_grid, record.columns),
                 color = WhiteText,
                 fontSize = 18.sp
             )
@@ -239,7 +314,7 @@ fun DetailReg(record: GameRecord?) {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                "Dificultat: ${record.difficulty}",
+                stringResource(R.string.detail_diff, record.difficulty),
                 color = WhiteText,
                 fontSize = 18.sp
             )
@@ -247,7 +322,7 @@ fun DetailReg(record: GameRecord?) {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                "Temps restant (segons): ${record.timeLeft}",
+                stringResource(R.string.detail_time, record.timeLeft),
                 color = WhiteText,
                 fontSize = 18.sp
             )
@@ -255,7 +330,7 @@ fun DetailReg(record: GameRecord?) {
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
-                "Resultat: ${record.result}",
+                stringResource(R.string.detail_result, record.result),
                 color = if(record.result.contains("GUANYAT")) NeonCyan else NeonRed,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
